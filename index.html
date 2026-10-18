@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Regi Penxten</title>
+<meta name="description" content="Regi Penxten: DJ/media phenomenon in Belgium · Hitmaker & wine lover. Luister, shop de merch en schrijf je in voor de nieuwsbrief.">
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="assets/logo/favicon.ico">
+<link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Regi">
+<meta property="og:description" content="DJ/media phenomenon in Belgium · Hitmaker & wine lover">
+<!-- og:image + og:url need an absolute URL: check once the domain points here (BUILD-STATUS) -->
+<meta property="og:image" content="https://www.regipenxten.be/assets/img/og-regi.jpg">
+<meta property="og:url" content="https://www.regipenxten.be/">
+<link rel="preload" as="image" href="assets/img/regi-r-1400.jpg"
+      imagesrcset="assets/img/regi-r-900.jpg 900w, assets/img/regi-r-1400.jpg 1400w, assets/img/regi-r-2000.jpg 2000w"
+      imagesizes="85vh">
+<style>
+/* ==========================================================================
+   Regi v2: fans first, one page, timeless.
+   Palette = the brand (brand-assets/regi/colors.json): black canvas, white type,
+   orange #FA5301 ONLY on buttons (it echoes the orange R on his shirt in the hero).
+   One typeface (Helvetica Neue, per the brand guide); the spray logo is the display
+   element. No grain, no gradients, no second display font: a deliberate departure
+   from the Anti-Generic Guardrails, see ../regi/BRIEF-v2.md.
+   ========================================================================== */
+:root{
+  --ink:#000000;
+  --paper:#FFFFFF;
+  --orange:#FA5301;
+  --mist:rgba(255,255,255,.66);   /* secondary text, 9:1 on black */
+  --faint:rgba(255,255,255,.48);  /* footer, 5.6:1 on black */
+  --edge:rgba(255,255,255,.34);   /* field outline */
+
+  --font:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+
+  --s1:.5rem; --s2:.75rem; --s3:1rem; --s4:1.5rem; --s5:2rem; --s6:3rem; --s7:4.5rem; --s8:7rem;
+  --gutter:16px;
+  --max:1240px;
+
+  --spring:cubic-bezier(.34,1.56,.64,1);
+  --out:cubic-bezier(.22,1,.36,1);
+}
+@media (min-width:640px){ :root{ --gutter:32px; } }
+@media (min-width:1100px){ :root{ --gutter:48px; } }
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+body{
+  margin:0; background:var(--ink); color:var(--paper);
+  font:400 1rem/1.6 var(--font);
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+}
+img{ display:block; max-width:100%; height:auto; }
+a{ color:inherit; -webkit-tap-highlight-color:transparent; }
+.sr{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+
+/* ---- Buttons (pill, per the brand guide) -------------------------------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.55em;
+  min-height:52px; padding:0 1.65em; border:0; border-radius:999px; cursor:pointer;
+  font:700 1rem/1 var(--font); letter-spacing:.005em; text-decoration:none;
+  transition:transform .4s var(--spring), opacity .2s ease;
+}
+.btn svg{ width:1.2em; height:1.2em; fill:currentColor; flex:none; }
+.btn--orange{ background:var(--orange); color:var(--ink); }   /* black on orange: 6.3:1 */
+.btn--line{ background:transparent; color:var(--paper); box-shadow:inset 0 0 0 1.5px var(--paper); }
+.btn:hover{ transform:translateY(-2px); }
+.btn--line:hover{ background:var(--paper); color:var(--ink); }
+.btn:active{ transform:scale(.96); transition-duration:.12s; }
+.btn:focus-visible{ outline:3px solid var(--paper); outline-offset:3px; }
+.btn[disabled]{ opacity:.6; cursor:progress; transform:none; }
+
+/* ---- 1. Hero ------------------------------------------------------------- */
+/* isolation: the logo is a white-on-black JPEG blended with `screen`, which is
+   mathematically identical to white with alpha but 2.5x lighter. Nothing between
+   .hero and the logo may create a stacking context, or the black box shows. */
+.hero{
+  position:relative; isolation:isolate; overflow:hidden;
+  min-height:100vh; min-height:100svh;
+  display:flex; flex-direction:column; justify-content:flex-end;
+}
+.hero__photo{ position:absolute; inset:0; z-index:-1; }
+/* the photo is height-driven: on a phone it overfills the width (cover), on a wide
+   screen it sits in the black. Its edges were graded to pure #000, so no seam. */
+.hero__photo img{
+  position:absolute; top:0; left:50%;
+  height:100%; width:auto; max-width:none;
+  transform:translateX(-50%);
+}
+/* portrait phones: anchor the photo to the bottom and never let it shrink below
+   800px. The content sits on his shirt, so the orange shirt-R keeps the same
+   distance above the logo on every phone (with or without browser bars). */
+@media (orientation:portrait){
+  .hero__photo img{ top:auto; bottom:0; height:max(100%, 800px); }
+}
+.hero__content{
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+  padding:0 var(--gutter) max(var(--s5), env(safe-area-inset-bottom));
+}
+.hero__title{ margin:0; line-height:0; }
+.logo{ width:min(82vw, 320px); mix-blend-mode:screen; }
+/* two lines from his own bio, without emoji (Lester 18/10, ronde 2): each line kept
+   whole, sized so the longer line fits a 320px phone */
+.hero__line{
+  margin:var(--s1) 0 0;
+  font-size:clamp(.9375rem, 4.3vw, 1.125rem); font-weight:500; line-height:1.4; letter-spacing:-.01em;
+}
+.hero__line span{ display:block; white-space:nowrap; }
+.hero__actions{ display:flex; flex-wrap:wrap; justify-content:center; gap:var(--s2); margin-top:1.25rem; }
+/* tablets and near-square windows keep the stacked layout with a bigger name;
+   400px still clears the shirt-R (content stays under 35% of the photo height) */
+@media (min-width:640px){
+  .logo{ width:400px; }
+  .hero__line{ font-size:1.25rem; }
+}
+
+/* wide screens: Regi on the right in his spotlight, the name on the left.
+   Switches on aspect ratio, not width, so near-square windows keep the stacked
+   layout instead of running the logo over his shoulder. */
+@media (min-width:640px) and (min-aspect-ratio:5/4){
+  .hero{ justify-content:center; }
+  .hero__photo{ left:0; right:0; max-width:calc(var(--max) + 2 * var(--gutter)); margin:0 auto; }
+  .hero__photo img{ left:auto; right:var(--gutter); transform:none; }
+  .hero__content{
+    width:100%; max-width:calc(var(--max) + 2 * var(--gutter)); margin:0 auto;
+    align-items:flex-start; text-align:left;
+    padding:clamp(1.5rem, 8vh, 4.5rem) var(--gutter);
+  }
+  .logo{ width:clamp(280px, 40vw, 620px); margin-left:-1.8%; }  /* optically: the R's tail on the text edge */
+  .hero__line{ margin-top:var(--s3); font-size:clamp(1.125rem, 1.7vw, 1.5rem); letter-spacing:-.015em; }
+  .hero__actions{ justify-content:flex-start; margin-top:var(--s5); }
+}
+
+/* load: the logo lands, the line and buttons follow. Animated on the blended
+   element itself (not its parent), so the screen blend stays intact.
+   Paced between the first version (too fast to notice) and round 1 (a touch too
+   slow), Lester 18/10: done after about 1.85s. */
+@media (prefers-reduced-motion:no-preference){
+  .hero__photo img{ animation:fade 1.65s ease both; }
+  .logo{ animation:land 1.3s var(--out) .2s both; }
+  .hero__line{ animation:rise 1.05s var(--out) .65s both; }
+  .hero__actions{ animation:rise 1.05s var(--out) .8s both; }
+}
+@keyframes fade{ from{ opacity:0; } to{ opacity:1; } }
+@keyframes land{ from{ opacity:0; transform:scale(1.06); } to{ opacity:1; transform:none; } }
+@keyframes rise{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
+
+/* ---- 2. Newsletter ------------------------------------------------------- */
+/* The photographer's composition (Regi small, a full hall) is the point. Phones
+   keep the taller crop Lester approved on his own phone; from 640px on the photo
+   always shows whole, at its own 3:2, whatever the window size. */
+/* minmax(0,1fr): without it the e-mail field's intrinsic width widened the column
+   past a 320px screen (sideways scroll) */
+.news{ display:grid; grid-template-columns:minmax(0,1fr); gap:var(--s5); padding:var(--s6) 0 var(--s5); }
+.news__photo{ margin:0; overflow:hidden; aspect-ratio:3 / 2; }
+.news__photo img{ width:100%; height:100%; object-fit:cover; }
+/* the phone crop only ever trims the sides (never top or bottom): the box is
+   never flatter than the photo's own 3:2, so Regi and the hall stay whole */
+@media (max-width:639px){
+  .news__photo{ aspect-ratio:auto; height:max(calc(100vw / 1.5), clamp(260px, 46svh, 440px)); }
+  .news__photo img{ object-position:72% 50%; }
+}
+.news__body{ padding:0 var(--gutter); max-width:36rem; width:100%; margin:0 auto; text-align:center; }
+.label{ margin:0 0 var(--s2); font-size:.8125rem; font-weight:700; letter-spacing:.02em; color:var(--mist); }
+.news__title{
+  margin:0 0 var(--s4);
+  font-size:clamp(2rem, 8.4vw, 3.5rem); font-weight:700; line-height:1.02; letter-spacing:-.035em;
+  text-wrap:balance;
+}
+@media (min-width:900px){
+  .news{
+    grid-template-columns:minmax(0,7fr) minmax(0,5fr); align-items:center;
+    gap:clamp(2.5rem, 5vw, 5rem);
+    max-width:calc(var(--max) + 2 * var(--gutter)); margin:0 auto;
+    padding:var(--s8) var(--gutter) var(--s6);
+  }
+  .news__body{ padding:0; margin:0; text-align:left; }
+}
+
+/* The one scroll moment (Lester 18/10, ronde 2: "C, als het snel gaat"). The photo pins
+   for about one thumb swipe and zooms out from Regi waving to the full hall, ending on
+   the photographer's own composition. Only the script switches it on (html.has-zoom), never
+   under "reduce motion", so without it this is the plain photo above. The ::after is the
+   scroll distance: a sticky element can only travel inside its parent's content box.
+   Centred on the small viewport (svh), so iOS toolbars collapsing never make it jump. */
+html.has-zoom .zoom::after{ content:""; display:block; height:60vh; height:60svh; }
+html.has-zoom .news__photo{
+  position:sticky;
+  top:max(0px, calc(50vh - var(--fh, 0px) / 2));
+  top:max(0px, calc(50svh - var(--fh, 0px) / 2));
+}
+html.has-zoom .news__photo img{ will-change:transform; }
+@media (min-width:900px){
+  /* the text column ends level with the photo where the moment ends */
+  html.has-zoom .news{ align-items:end; }
+  html.has-zoom .news__body{ min-height:var(--fh, auto); display:flex; flex-direction:column; justify-content:center; }
+}
+
+/* the blocks below arrive lightly as they scroll into view, same easing as the hero */
+html.motion .rv{ opacity:0; transform:translateY(18px); }
+html.motion .rv.in{
+  opacity:1; transform:none;
+  transition:opacity .9s var(--out) var(--d, 0s), transform 1.1s var(--out) var(--d, 0s);
+}
+
+.signup{ margin:0; }
+.signup__row{
+  display:flex; align-items:center; gap:var(--s1);
+  padding:5px; border-radius:999px;
+  box-shadow:inset 0 0 0 1.5px var(--edge);
+}
+.signup__row:focus-within{ box-shadow:inset 0 0 0 1.5px var(--paper); }
+.signup.is-invalid .signup__row{ box-shadow:inset 0 0 0 2.5px var(--paper); }
+.signup input[type="email"]{
+  flex:1; min-width:0; height:46px; padding:0 0 0 var(--s3);
+  border:0; background:transparent; color:var(--paper); caret-color:var(--orange);
+  font:500 1rem var(--font); outline:none;
+}
+.signup input[type="email"]::placeholder{ color:rgba(255,255,255,.5); }
+.signup input:-webkit-autofill{ -webkit-box-shadow:0 0 0 100px var(--ink) inset; -webkit-text-fill-color:var(--paper); }
+.signup .btn{ min-height:46px; padding:0 1.3em; flex:none; }
+.signup__fine{ margin:var(--s2) 0 0; font-size:.875rem; color:var(--mist); }
+.signup__fine a{ color:var(--paper); text-underline-offset:3px; border-radius:3px; transition:opacity .2s ease; }
+.signup__fine a:hover{ text-decoration-thickness:2px; }
+.signup__fine a:active{ opacity:.6; }
+.signup__fine a:focus-visible{ outline:2px solid var(--paper); outline-offset:3px; }
+.signup__msg{ margin:0; font-size:.9375rem; font-weight:500; }
+.signup__msg:not(:empty){ margin-top:var(--s2); }
+.hp{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+
+/* ---- 3. Contact + socials + footer -------------------------------------- */
+.contact{ max-width:calc(var(--max) + 2 * var(--gutter)); margin:0 auto; padding:var(--s6) var(--gutter) 0; text-align:center; }
+.roles{ list-style:none; margin:var(--s4) 0 0; padding:0; display:grid; gap:var(--s4); }
+.roles li{ display:grid; gap:.2rem; justify-items:center; }
+.role{ font-size:.8125rem; font-weight:700; letter-spacing:.02em; color:var(--mist); }
+.mail{
+  font-size:clamp(1.0625rem, 4.6vw, 1.25rem); font-weight:500; letter-spacing:-.01em;
+  text-decoration:underline; text-decoration-color:transparent; text-underline-offset:5px; text-decoration-thickness:1.5px;
+  border-radius:4px; transition:opacity .2s ease;
+}
+.mail:hover{ text-decoration-color:currentColor; }
+.mail:active{ opacity:.6; }
+.mail:focus-visible{ outline:2px solid var(--paper); outline-offset:4px; text-decoration-color:currentColor; }
+@media (min-width:640px){ .roles{ grid-template-columns:repeat(2, minmax(0,1fr)); row-gap:var(--s5); } }
+@media (min-width:1100px){ .roles{ grid-template-columns:repeat(4, minmax(0,1fr)); } }
+
+.socials{ list-style:none; display:flex; justify-content:center; gap:var(--s1); margin:var(--s6) 0 0; padding:0; }
+.socials a{
+  display:grid; place-items:center; width:48px; height:48px; border-radius:999px;
+  opacity:.82; transition:transform .4s var(--spring), opacity .2s ease;
+}
+.socials a:hover{ opacity:1; transform:translateY(-2px); }
+.socials a:active{ transform:scale(.92); transition-duration:.12s; }
+.socials a:focus-visible{ outline:2px solid var(--paper); outline-offset:2px; opacity:1; }
+.socials svg{ width:22px; height:22px; fill:currentColor; }
+
+.foot{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:.35rem 1.25rem;
+  margin:0; padding:var(--s5) var(--gutter) max(var(--s5), env(safe-area-inset-bottom));
+  font-size:.8125rem; color:var(--faint);
+}
+.foot p{ margin:0; }
+/* one line, credit last (Lester 18/10, ronde 2); each item stays whole, so on the
+   narrowest phones the credit drops below as a unit, never mid-name */
+.foot > *{ white-space:nowrap; }
+.foot a{ color:var(--mist); text-underline-offset:3px; border-radius:3px; transition:opacity .2s ease; }
+.foot a:hover{ color:var(--paper); }
+.foot a:active{ opacity:.6; }
+.foot a:focus-visible{ outline:2px solid var(--paper); outline-offset:3px; }
+</style>
+</head>
+<body>
+
+<!-- 1. Hero: Regi, the logo, one line, two buttons -->
+<header class="hero">
+  <div class="hero__photo">
+    <!-- Persfoto 2026 (shoot nov 2024), Ilias Van Bambost. -->
+    <img src="assets/img/regi-r-1400.jpg"
+         srcset="assets/img/regi-r-900.jpg 900w, assets/img/regi-r-1400.jpg 1400w, assets/img/regi-r-2000.jpg 2000w"
+         sizes="85vh" width="2000" height="2359" fetchpriority="high"
+         alt="Regi in een zwart T-shirt met een oranje R, in blauw licht.">
+  </div>
+  <div class="hero__content">
+    <h1 class="hero__title">
+      <!-- Logo 2026 "no paint" (Lester 18/10), inverted to white on black for the screen blend -->
+      <img class="logo" src="assets/logo/regi-2026-800.jpg"
+           srcset="assets/logo/regi-2026-800.jpg 800w, assets/logo/regi-2026-1200.jpg 1200w, assets/logo/regi-2026-1600.jpg 1600w"
+           sizes="(min-width: 640px) and (min-aspect-ratio: 5/4) 40vw, (min-width: 640px) 400px, (max-width: 390px) 82vw, 320px"
+           width="1600" height="624" alt="Regi">
+    </h1>
+    <!-- Two lines from his bio, no emoji (Lester 18/10, ronde 2): English, the rest of the site is Dutch -->
+    <p class="hero__line" lang="en"><span>DJ/media phenomenon in Belgium</span> <span>Hitmaker &amp; wine lover</span></p>
+    <div class="hero__actions">
+      <a class="btn btn--orange" href="https://open.spotify.com/artist/77ehFS1P2bU6Bfcs1qu6Jd" target="_blank" rel="noopener" aria-label="Luister naar Regi op Spotify">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+        Luister
+      </a>
+      <a class="btn btn--line" href="https://www.mistert.be/regi" target="_blank" rel="noopener" aria-label="Shop de merch van Regi">Shop</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- 2. Newsletter: the one other photo, one benefit line, one field -->
+<section class="news" aria-labelledby="news-title">
+  <div class="zoom">
+    <figure class="news__photo">
+      <!-- sizes include the 2.2x zoom-in, so the close-up of Regi stays sharp -->
+      <img src="assets/img/sportpaleis-bw-900.jpg"
+           srcset="assets/img/sportpaleis-bw-900.jpg 900w, assets/img/sportpaleis-bw-1600.jpg 1600w, assets/img/sportpaleis-bw-2400.jpg 2400w"
+           sizes="(max-width: 639px) 330vw, (max-width: 899px) 220vw, 128vw" width="1600" height="1066" loading="lazy" decoding="async"
+           alt="Regi zwaait naar een volle zaal in het Sportpaleis.">
+    </figure>
+  </div>
+  <div class="news__body">
+    <p class="label rv">Nieuwsbrief</p>
+    <h2 class="news__title rv" style="--d:.08s" id="news-title">Als eerste weten: nieuwe muziek, shows en presales.</h2>
+    <form class="signup rv" style="--d:.16s" id="signup" novalidate>
+      <label class="sr" for="email">Je e-mailadres</label>
+      <div class="signup__row">
+        <input id="email" name="email" type="email" inputmode="email" autocomplete="email"
+               autocapitalize="off" spellcheck="false" placeholder="Je e-mailadres" required
+               aria-describedby="signup-fine">
+        <button class="btn btn--orange" type="submit">Schrijf me in</button>
+      </div>
+      <div class="hp" aria-hidden="true"><label>Laat dit leeg <input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <p class="signup__fine" id="signup-fine">Af en toe een mail. Uitschrijven kan altijd. <a href="privacy.html">Privacy</a></p>
+      <p class="signup__msg" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<!-- 3. Contact per role + socials -->
+<section class="contact" aria-labelledby="contact-title">
+  <h2 class="label rv" id="contact-title">Contact</h2>
+  <ul class="roles">
+    <li class="rv"><span class="role">Algemeen</span><a class="mail" href="mailto:lester@regipenxten.be">lester@regipenxten.be</a></li>
+    <li class="rv" style="--d:.08s"><span class="role">Dj-boekingen</span><a class="mail" href="mailto:info@tttartists.be">info@tttartists.be</a></li>
+    <li class="rv" style="--d:.16s"><span class="role">Milk Inc. live</span><a class="mail" href="mailto:liesje@onebookings.be">liesje@onebookings.be</a></li>
+    <li class="rv" style="--d:.24s"><span class="role">Pers &amp; promo</span><a class="mail" href="mailto:mats.blankers@cnrrecords.be">mats.blankers@cnrrecords.be</a></li>
+  </ul>
+
+  <ul class="socials rv" aria-label="Regi op sociale media">
+    <li><a href="https://www.instagram.com/realregi" target="_blank" rel="noopener" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg>
+    </a></li>
+    <li><a href="https://www.tiktok.com/@regipenxten" target="_blank" rel="noopener" aria-label="TikTok">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+    </a></li>
+    <li><a href="https://open.spotify.com/artist/77ehFS1P2bU6Bfcs1qu6Jd" target="_blank" rel="noopener" aria-label="Spotify">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+    </a></li>
+    <li><a href="https://www.facebook.com/regi" target="_blank" rel="noopener" aria-label="Facebook">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg>
+    </a></li>
+    <li><a href="https://x.com/Realregi" target="_blank" rel="noopener" aria-label="X">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>
+    </a></li>
+  </ul>
+</section>
+
+</main>
+
+<footer class="foot">
+  <p>© Regi Penxten</p>
+  <a href="privacy.html">Privacy</a>
+  <p class="credit">Foto's: Ilias Van Bambost</p>
+</footer>
+
+<script>
+(function () {
+  /* Beweging bij het scrollen (Lester 18/10, ronde 2). Niets bij "Beperk beweging" en
+     niets met ?qa (zo tonen screenshots elk blok volledig en de foto stilstaand). */
+  var root = document.documentElement;
+  var qa = /[?&]qa\b/.test(location.search);
+  if (qa || !window.matchMedia || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  /* De blokken onder de hero komen licht op, één keer. */
+  if ("IntersectionObserver" in window) {
+    root.classList.add("motion");
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.15 });
+    [].forEach.call(document.querySelectorAll(".rv"), function (el) { io.observe(el); });
+  }
+
+  /* Het zoommoment: van Regi die zwaait naar de volle zaal. */
+  var news = document.querySelector(".news");
+  var wrap = news && news.querySelector(".zoom");
+  var fig = wrap && wrap.querySelector(".news__photo");
+  var img = fig && fig.querySelector("img");
+  if (!img) return;
+  root.classList.add("has-zoom");
+
+  var S = 2.2;                 /* beginzoom */
+  var FX = 0.694, FY = 0.70;   /* Regi's hand + bovenlijf in de foto (0..1) */
+  var RATIO = 1.5, POS_X = 0.72; /* de foto is 3:2; de gsm-uitsnede (object-position) */
+  var fx = FX, fy = FY, queued = false;
+
+  function measure() {
+    var w = fig.offsetWidth, h = fig.offsetHeight;
+    news.style.setProperty("--fh", h + "px");
+    /* waar Regi staat in het zichtbare kader (object-fit: cover) */
+    if (w / h < RATIO) { var dw = h * RATIO; fx = ((w - dw) * POS_X + FX * dw) / w; fy = FY; }
+    else { var dh = w / RATIO; fx = FX; fy = ((h - dh) / 2 + FY * dh) / h; }
+    var half = 0.5 / S;  /* het beginvenster blijft altijd binnen de foto */
+    fx = Math.min(Math.max(fx, half), 1 - half);
+    fy = Math.min(Math.max(fy, half), 1 - half);
+    update();
+  }
+
+  function update() {
+    queued = false;
+    /* voortgang = hoe ver de vastgezette foto al in zijn wrapper is opgeschoven */
+    var run = wrap.offsetHeight - fig.offsetHeight;
+    var moved = fig.getBoundingClientRect().top - wrap.getBoundingClientRect().top;
+    var p = run > 0 ? Math.min(Math.max(moved / run, 0), 1) : 1;
+    var e = p * p * (3 - 2 * p);               /* zacht in, zacht uit */
+    var s = 1 / (1 / S + (1 - 1 / S) * e);     /* venster groeit lineair: nooit een rand */
+    var cx = fx + (0.5 - fx) * e, cy = fy + (0.5 - fy) * e;
+    img.style.transform = "translate(" + (-(cx - 0.5) * s * 100).toFixed(3) + "%," +
+      (-(cy - 0.5) * s * 100).toFixed(3) + "%) scale(" + s.toFixed(4) + ")";
+  }
+
+  window.addEventListener("scroll", function () {
+    if (!queued) { queued = true; requestAnimationFrame(update); }
+  }, { passive: true });
+  window.addEventListener("resize", measure);
+  measure();
+})();
+
+(function () {
+  /* Nieuwsbrief -> Google Sheet "Regi · Nieuwsbrief" via de Apps Script web-app,
+     hetzelfde patroon als MILK RUN (zie DATA-CAPTURE.md + apps-script/Code.gs).
+     Plak hier de /exec-URL na het deployen. Leeg = demo-modus: het formulier werkt
+     volledig, maar verstuurt niets en bewaart enkel lokaal in deze browser.
+     NOOIT live zetten met een lege FORM_ENDPOINT: dan gaat elke inschrijving verloren. */
+  var FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbx-hYqyZZ37_NrNOq4Yqt9d4yqra_CwzqE1DgngymrMlcxxlfFfpmpJvyNXdK0XFe17jw/exec";
+
+  var form = document.getElementById("signup");
+  if (!form) return;
+  var input = form.querySelector('input[name="email"]');
+  var trap = form.querySelector('input[name="website"]');
+  var msg = form.querySelector(".signup__msg");
+  var btn = form.querySelector('button[type="submit"]');
+  var label = btn.textContent;
+  var EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/;
+
+  function say(text) { msg.textContent = text; }
+  function invalid(on) {
+    form.classList.toggle("is-invalid", on);
+    if (on) input.setAttribute("aria-invalid", "true"); else input.removeAttribute("aria-invalid");
+  }
+  function done(ok) {
+    btn.disabled = false; btn.textContent = label;
+    if (ok) { form.reset(); say("Je bent ingeschreven. Tot in je inbox!"); }
+    else say("Inschrijven lukte niet. Probeer het straks opnieuw.");
+  }
+
+  input.addEventListener("input", function () {
+    if (form.classList.contains("is-invalid")) { invalid(false); say(""); }
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (trap && trap.value) { done(true); return; }          /* honeypot: doe alsof, bewaar niets */
+    var email = input.value.trim();
+    if (!EMAIL.test(email) || email.length > 120) {
+      invalid(true);
+      say("Dat e-mailadres klopt niet. Kijk het even na.");
+      input.focus();
+      return;
+    }
+    /* `at` = het moment van de klik op "Schrijf me in": dat is de toestemming */
+    var data = { type: "news", email: email, at: new Date().toISOString(), website: "" };
+    btn.disabled = true; btn.textContent = "Even geduld…"; say("");
+
+    if (FORM_ENDPOINT) {
+      /* form-urlencoded = "simple request": geen CORS-preflight tegen Apps Script.
+         Het script antwoordt met platte tekst: news-ok / news-dup (stond er al) /
+         news-bad (geweigerd). Al de rest (bv. een kaal "ok" van een verkeerde
+         deployment) telt als mislukt, zodat een adres nooit stil verdwijnt. */
+      fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(data).toString()
+      })
+        .then(function (r) { return r.text(); })
+        .then(function (t) {
+          t = String(t).trim();
+          if (t === "news-ok" || t === "news-dup") { done(true); return; }
+          if (t === "news-bad") {
+            btn.disabled = false; btn.textContent = label; invalid(true);
+            say("Dat e-mailadres klopt niet. Kijk het even na."); input.focus(); return;
+          }
+          done(false);
+        })
+        .catch(function () { done(false); });
+    } else {
+      try {
+        var key = "regi_v2_demo_signups";
+        var list = JSON.parse(localStorage.getItem(key) || "[]");
+        list.push(data); localStorage.setItem(key, JSON.stringify(list));
+      } catch (err) {}
+      if (window.console) console.info("[Regi v2, demo-modus] niet verstuurd, enkel lokaal bewaard:", data);
+      setTimeout(function () { done(true); }, 500);
+    }
+  });
+})();
+</script>
+</body>
+</html>
