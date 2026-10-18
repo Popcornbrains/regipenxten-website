@@ -133,6 +133,10 @@ a{ color:inherit; -webkit-tap-highlight-color:transparent; }
 }
 .hero__line span{ display:block; white-space:nowrap; }
 .hero__actions{ display:flex; flex-wrap:wrap; justify-content:center; gap:var(--s2); margin-top:1.25rem; }
+/* three buttons (Shows since 18/10) must stay on ONE row on phones: a second row makes
+   the hero content taller and pushes the logo over the shirt-R */
+@media (max-width:429px){ .hero__actions{ gap:8px; } .hero__actions .btn{ padding:0 1.15em; } }
+@media (max-width:359px){ .hero__actions .btn{ min-height:48px; padding:0 1em; font-size:.9375rem; } }
 /* tablets and near-square windows keep the stacked layout with a bigger name;
    400px still clears the shirt-R (content stays under 35% of the photo height) */
 @media (min-width:640px){
@@ -328,6 +332,8 @@ html.motion .rv.in{
         Luister
       </a>
       <a class="btn btn--line" href="https://www.mistert.be/regi" target="_blank" rel="noopener" aria-label="Shop de merch van Regi">Shop</a>
+      <!-- Shows -> Bandsintown for now; an own shows page comes later (Lester 18/10) -->
+      <a class="btn btn--line" href="https://www.bandsintown.com/a/370722-regi" target="_blank" rel="noopener" aria-label="Alle shows van Regi op Bandsintown">Shows</a>
     </div>
   </div>
 </header>
