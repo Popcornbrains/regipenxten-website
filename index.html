@@ -133,10 +133,6 @@ a{ color:inherit; -webkit-tap-highlight-color:transparent; }
 }
 .hero__line span{ display:block; white-space:nowrap; }
 .hero__actions{ display:flex; flex-wrap:wrap; justify-content:center; gap:var(--s2); margin-top:1.25rem; }
-/* three buttons (Shows since 18/10) must stay on ONE row on phones: a second row makes
-   the hero content taller and pushes the logo over the shirt-R */
-@media (max-width:429px){ .hero__actions{ gap:8px; } .hero__actions .btn{ padding:0 1.15em; } }
-@media (max-width:359px){ .hero__actions .btn{ min-height:48px; padding:0 1em; font-size:.9375rem; } }
 /* tablets and near-square windows keep the stacked layout with a bigger name;
    400px still clears the shirt-R (content stays under 35% of the photo height) */
 @media (min-width:640px){
@@ -261,6 +257,9 @@ html.motion .rv.in{
 .signup__msg:not(:empty){ margin-top:var(--s2); }
 .hp{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
 
+/* ---- Shows: one quiet button just above contact ------------------------- */
+.shows{ display:flex; justify-content:center; padding:var(--s6) var(--gutter) 0; }
+
 /* ---- 3. Contact + socials + footer -------------------------------------- */
 .contact{ max-width:calc(var(--max) + 2 * var(--gutter)); margin:0 auto; padding:var(--s6) var(--gutter) 0; text-align:center; }
 .roles{ list-style:none; margin:var(--s4) 0 0; padding:0; display:grid; gap:var(--s4); }
@@ -327,14 +326,11 @@ html.motion .rv.in{
     <!-- Two lines from his bio, no emoji (Lester 18/10, ronde 2): English, the rest of the site is Dutch -->
     <p class="hero__line" lang="en"><span>DJ/media phenomenon in Belgium</span> <span>Hitmaker &amp; wine lover</span></p>
     <div class="hero__actions">
-      <!-- Order Shop · Luister · Shows: the orange Spotify button in the middle (Lester 18/10) -->
-      <a class="btn btn--line" href="https://www.mistert.be/regi" target="_blank" rel="noopener" aria-label="Shop de merch van Regi">Shop</a>
       <a class="btn btn--orange" href="https://open.spotify.com/artist/77ehFS1P2bU6Bfcs1qu6Jd" target="_blank" rel="noopener" aria-label="Luister naar Regi op Spotify">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
         Luister
       </a>
-      <!-- Shows -> Bandsintown for now; an own shows page comes later (Lester 18/10) -->
-      <a class="btn btn--line" href="https://www.bandsintown.com/a/370722-regi" target="_blank" rel="noopener" aria-label="Alle shows van Regi op Bandsintown">Shows</a>
+      <a class="btn btn--line" href="https://www.mistert.be/regi" target="_blank" rel="noopener" aria-label="Shop de merch van Regi">Shop</a>
     </div>
   </div>
 </header>
@@ -369,6 +365,12 @@ html.motion .rv.in{
     </form>
   </div>
 </section>
+
+<!-- Shows -> Bandsintown for now (own shows page later). Just above contact, not in the
+     hero: "zo prominent moet die niet zijn op de eerste indruk" (Regi 18/10) -->
+<div class="shows rv">
+  <a class="btn btn--line" href="https://www.bandsintown.com/a/370722-regi" target="_blank" rel="noopener" aria-label="Alle shows van Regi op Bandsintown">Shows</a>
+</div>
 
 <!-- 3. Contact per role + socials -->
 <section class="contact" aria-labelledby="contact-title">
