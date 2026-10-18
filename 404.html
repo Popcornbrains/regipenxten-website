@@ -33,7 +33,7 @@ main{
   display:flex; flex-direction:column; align-items:center; text-align:center;
   padding:3rem 16px max(3rem, env(safe-area-inset-bottom));
 }
-img{ display:block; width:min(70vw, 280px); height:auto; }   /* white on pure #000: no blend needed */
+img{ display:block; width:min(70vw, 280px); height:auto; mix-blend-mode:screen; }   /* white-on-black JPEG, same trick as the hero */
 p{ margin:1.25rem 0 0; font-size:1.125rem; font-weight:500; line-height:1.4; letter-spacing:-.01em; color:var(--mist); }
 .btn{
   display:inline-flex; align-items:center; justify-content:center;
@@ -51,7 +51,7 @@ p{ margin:1.25rem 0 0; font-size:1.125rem; font-weight:500; line-height:1.4; let
 </head>
 <body>
 <main>
-  <h1 style="margin:0; line-height:0;"><img src="/assets/logo/regi-2026-800.jpg" width="800" height="312" alt="Regi"></h1>
+  <h1 style="margin:0; line-height:0;"><img src="/assets/logo/regi-spray-800.jpg" width="800" height="311" alt="Regi"></h1>
   <p>Deze pagina bestaat niet meer.</p>
   <a class="btn" href="/">Naar de homepage</a>
 </main>
