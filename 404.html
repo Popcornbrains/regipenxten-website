@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Regi Penxten</title>
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/assets/logo/favicon.ico">
+<!-- Vangnet voor de oude Squarespace-links (/agenda, /meetandgreet, /store-..., /nieuws, ...):
+     GitHub Pages toont deze pagina voor elk onbekend pad, dus alle paden zijn absoluut (/).
+     Wie hier landt, gaat meteen naar de homepage; de pagina zelf is enkel de terugval.
+     ?qa blijft staan (voor screenshots), zoals op de homepage. -->
+<script>if (!/[?&]qa\b/.test(location.search)) location.replace("/");</script>
+<noscript><meta http-equiv="refresh" content="0; url=/"></noscript>
+<style>
+:root{
+  --ink:#000000; --paper:#FFFFFF; --orange:#FA5301; --mist:rgba(255,255,255,.66);
+  --font:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  --spring:cubic-bezier(.34,1.56,.64,1);
+}
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+body{
+  margin:0; min-height:100vh; min-height:100svh;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--ink); color:var(--paper);
+  font:400 1rem/1.6 var(--font);
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+}
+main{
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+  padding:3rem 16px max(3rem, env(safe-area-inset-bottom));
+}
+img{ display:block; width:min(70vw, 280px); height:auto; }   /* white on pure #000: no blend needed */
+p{ margin:1.25rem 0 0; font-size:1.125rem; font-weight:500; line-height:1.4; letter-spacing:-.01em; color:var(--mist); }
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-height:52px; margin-top:1.75rem; padding:0 1.65em; border-radius:999px;
+  background:var(--orange); color:var(--ink);
+  font:700 1rem/1 var(--font); letter-spacing:.005em; text-decoration:none;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .4s var(--spring);
+}
+.btn:hover{ transform:translateY(-2px); }
+.btn:active{ transform:scale(.96); transition-duration:.12s; }
+.btn:focus-visible{ outline:3px solid var(--paper); outline-offset:3px; }
+@media (prefers-reduced-motion:reduce){ .btn{ transition:none; } }
+</style>
+</head>
+<body>
+<main>
+  <h1 style="margin:0; line-height:0;"><img src="/assets/logo/regi-2026-800.jpg" width="800" height="312" alt="Regi"></h1>
+  <p>Deze pagina bestaat niet meer.</p>
+  <a class="btn" href="/">Naar de homepage</a>
+</main>
+</body>
+</html>

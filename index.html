@@ -15,6 +15,28 @@
 <!-- og:image + og:url need an absolute URL: check once the domain points here (BUILD-STATUS) -->
 <meta property="og:image" content="https://www.regipenxten.be/assets/img/og-regi.jpg">
 <meta property="og:url" content="https://www.regipenxten.be/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://www.regipenxten.be/">
+<!-- For Google: who this site is about. Only facts and links already on this page. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Regi Penxten",
+  "alternateName": "Regi",
+  "url": "https://www.regipenxten.be/",
+  "image": "https://www.regipenxten.be/assets/img/og-regi.jpg",
+  "description": "DJ/media phenomenon in Belgium · Hitmaker & wine lover",
+  "sameAs": [
+    "https://www.instagram.com/realregi",
+    "https://www.tiktok.com/@regipenxten",
+    "https://www.facebook.com/regi",
+    "https://x.com/Realregi",
+    "https://open.spotify.com/artist/77ehFS1P2bU6Bfcs1qu6Jd",
+    "https://nl.wikipedia.org/wiki/Regi_Penxten"
+  ]
+}
+</script>
 <link rel="preload" as="image" href="assets/img/regi-r-1400.jpg"
       imagesrcset="assets/img/regi-r-900.jpg 900w, assets/img/regi-r-1400.jpg 1400w, assets/img/regi-r-2000.jpg 2000w"
       imagesizes="85vh">
@@ -179,6 +201,9 @@ a{ color:inherit; -webkit-tap-highlight-color:transparent; }
     padding:var(--s8) var(--gutter) var(--s6);
   }
   .news__body{ padding:0; margin:0; text-align:left; }
+  /* sized to the column, so "Weet het als eerste:" always stays whole on line 1
+     (Regi 18/10); at 56px it overflowed the ~485px column from 1680px on */
+  .news__title{ font-size:clamp(2rem, 3.6vw, 3.25rem); }
 }
 
 /* The one scroll moment (Lester 18/10, ronde 2: "C, als het snel gaat"). The photo pins
@@ -257,6 +282,9 @@ html.motion .rv.in{
 .socials a:active{ transform:scale(.92); transition-duration:.12s; }
 .socials a:focus-visible{ outline:2px solid var(--paper); outline-offset:2px; opacity:1; }
 .socials svg{ width:22px; height:22px; fill:currentColor; }
+/* six icons (Wikipedia since 18/10): 6 x 48 + gaps is 328px, wider than a 320px phone's
+   288px column, so the narrowest phones get 44px targets (still a full tap target) */
+@media (max-width:374px){ .socials{ gap:4px; } .socials a{ width:44px; height:44px; } }
 
 .foot{
   display:flex; flex-wrap:wrap; justify-content:center; gap:.35rem 1.25rem;
@@ -319,7 +347,7 @@ html.motion .rv.in{
   </div>
   <div class="news__body">
     <p class="label rv">Nieuwsbrief</p>
-    <h2 class="news__title rv" style="--d:.08s" id="news-title">Als eerste weten: nieuwe muziek, shows en presales.</h2>
+    <h2 class="news__title rv" style="--d:.08s" id="news-title">Weet het als eerste: nieuwe muziek, shows en presales.</h2>
     <form class="signup rv" style="--d:.16s" id="signup" novalidate>
       <label class="sr" for="email">Je e-mailadres</label>
       <div class="signup__row">
@@ -345,7 +373,7 @@ html.motion .rv.in{
     <li class="rv" style="--d:.24s"><span class="role">Pers &amp; promo</span><a class="mail" href="mailto:mats.blankers@cnrrecords.be">mats.blankers@cnrrecords.be</a></li>
   </ul>
 
-  <ul class="socials rv" aria-label="Regi op sociale media">
+  <ul class="socials rv" aria-label="Regi online">
     <li><a href="https://www.instagram.com/realregi" target="_blank" rel="noopener" aria-label="Instagram">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg>
     </a></li>
@@ -360,6 +388,9 @@ html.motion .rv.in{
     </a></li>
     <li><a href="https://x.com/Realregi" target="_blank" rel="noopener" aria-label="X">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>
+    </a></li>
+    <li><a href="https://nl.wikipedia.org/wiki/Regi_Penxten" target="_blank" rel="noopener" aria-label="Wikipedia">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.09 13.119c-.936 1.932-2.217 4.548-2.853 5.728-.616 1.074-1.127.931-1.532.029-1.406-3.321-4.293-9.144-5.651-12.409-.251-.601-.441-.987-.619-1.139-.181-.15-.554-.24-1.122-.271C.103 5.033 0 4.982 0 4.898v-.455l.052-.045c.924-.005 5.401 0 5.401 0l.051.045v.434c0 .119-.075.176-.225.176l-.564.031c-.485.029-.727.164-.727.436 0 .135.053.33.166.601 1.082 2.646 4.818 10.521 4.818 10.521l.136.046 2.411-4.81-.482-1.067-1.658-3.264s-.318-.654-.428-.872c-.728-1.443-.712-1.518-1.447-1.617-.207-.023-.313-.05-.313-.149v-.468l.06-.045h4.292l.113.037v.451c0 .105-.076.15-.227.15l-.308.047c-.792.061-.661.381-.136 1.422l1.582 3.252 1.758-3.504c.293-.64.233-.801.111-.947-.07-.084-.305-.22-.812-.24l-.201-.021c-.052 0-.098-.015-.145-.051-.045-.031-.067-.076-.067-.129v-.427l.061-.045c1.247-.008 4.043 0 4.043 0l.059.045v.436c0 .121-.059.178-.193.178-.646.03-.782.095-1.023.439-.12.186-.375.589-.646 1.039l-2.301 4.273-.065.135 2.792 5.712.17.048 4.396-10.438c.154-.422.129-.722-.064-.895-.197-.172-.346-.273-.857-.295l-.42-.016c-.061 0-.105-.014-.152-.045-.043-.029-.072-.075-.072-.119v-.436l.059-.045h4.961l.041.045v.437c0 .119-.074.18-.209.18-.648.03-1.127.18-1.443.421-.314.255-.557.616-.736 1.067 0 0-4.043 9.258-5.426 12.339-.525 1.007-1.053.917-1.503-.031-.571-1.171-1.773-3.786-2.646-5.71l.053-.036z"/></svg>
     </a></li>
   </ul>
 </section>
