@@ -28,9 +28,9 @@
      Belgische tijd is +02:00 tot zo 25/10 03:00. */
   var EVENINGS = [
     { bron: "meetandgreet-2026-10-23", day: "vrijdag 23 oktober",
-      open: "2026-10-23T19:00:00+02:00", close: "2026-10-24T02:00:00+02:00" },
+      open: "2026-10-23T18:30:00+02:00", close: "2026-10-24T02:00:00+02:00" },
     { bron: "meetandgreet-2026-10-24", day: "zaterdag 24 oktober",
-      open: "2026-10-24T19:00:00+02:00", close: "2026-10-25T02:00:00+02:00" }
+      open: "2026-10-24T18:30:00+02:00", close: "2026-10-25T02:00:00+02:00" }
   ];
 
   var TIMEOUT = 45000;                       /* per poging; de server wacht hoogstens 20 s op zijn slot */
