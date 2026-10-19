@@ -8,11 +8,24 @@
 <meta name="color-scheme" content="dark">
 <meta name="robots" content="noindex">
 <link rel="icon" href="/assets/logo/favicon.ico">
-<!-- Vangnet voor de oude Squarespace-links (/agenda, /meetandgreet, /store-..., /nieuws, ...):
+<!-- Vangnet voor de oude Squarespace-links (/agenda, /store-..., /home, ...):
      GitHub Pages toont deze pagina voor elk onbekend pad, dus alle paden zijn absoluut (/).
      Wie hier landt, gaat meteen naar de homepage; de pagina zelf is enkel de terugval.
+     /meetandgreet en /nieuws zijn echte pagina's. Een andere schrijfwijze van die twee
+     (hoofdletters, een slash achteraan, /nieuwsbrief, /news, /meet-and-greet) gaat naar de juiste pagina,
+     zodat elke QR of oude link blijft werken.
      ?qa blijft staan (voor screenshots), zoals op de homepage. -->
-<script>if (!/[?&]qa\b/.test(location.search)) location.replace("/");</script>
+<script>
+(function () {
+  if (/[?&]qa\b/.test(location.search)) return;
+  var p = location.pathname.toLowerCase().replace(/\/+$/, "").replace(/\.html$/, "");
+  var to = /^\/meet-?(and|en|&)?-?greet$/.test(p) ? "/meetandgreet"
+         : /^\/(nieuws(brief)?|news)$/.test(p) ? "/nieuws"
+         : "/";
+  /* nooit naar het pad waar we al staan: dat zou een lus zijn als die pagina er niet is */
+  location.replace(to === location.pathname || to === "/" ? "/" : to + location.search);
+})();
+</script>
 <noscript><meta http-equiv="refresh" content="0; url=/"></noscript>
 <style>
 :root{

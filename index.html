@@ -12,12 +12,24 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Regi">
 <meta property="og:description" content="DJ/media phenomenon in Belgium · Hitmaker & wine lover">
-<!-- og:image + og:url need an absolute URL: check once the domain points here (BUILD-STATUS) -->
 <meta property="og:image" content="https://www.regipenxten.be/assets/img/og-regi.jpg">
 <meta property="og:url" content="https://www.regipenxten.be/">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://www.regipenxten.be/">
 <!-- For Google: who this site is about. Only facts and links already on this page. -->
+<script>
+/* Een tik vóór de verzendhulp geladen is, wacht even in plaats van een kale POST te worden; de hulp
+   verstuurt hem zodra ze er is. Laadt ze niet, dan vertrekt hij alsnog als gewone POST (onerror onderaan). */
+document.addEventListener("submit", function (e) {
+  var f = e.target;
+  if (window.RegiSignup || window.RegiSignupUnavailable || !f.hasAttribute || !f.hasAttribute("data-regi")) return;
+  e.preventDefault();
+  if (f.hasAttribute("data-pending")) return;
+  f.setAttribute("data-pending", "");
+  var b = f.querySelector('button[type="submit"]');
+  if (b) { b.setAttribute("data-label", b.textContent); b.disabled = true; b.textContent = "Even geduld…"; }
+}, true);
+</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -242,7 +254,7 @@ html.motion .rv.in{
 .signup.is-invalid .signup__row{ box-shadow:inset 0 0 0 2.5px var(--paper); }
 .signup input[type="email"]{
   flex:1; min-width:0; height:46px; padding:0 0 0 var(--s3);
-  border:0; background:transparent; color:var(--paper); caret-color:var(--orange);
+  border:0; border-radius:999px; background:transparent; color:var(--paper); caret-color:var(--orange);
   font:500 1rem var(--font); outline:none;
 }
 .signup input[type="email"]::placeholder{ color:rgba(255,255,255,.5); }
@@ -255,7 +267,22 @@ html.motion .rv.in{
 .signup__fine a:focus-visible{ outline:2px solid var(--paper); outline-offset:3px; }
 .signup__msg{ margin:0; font-size:.9375rem; font-weight:500; }
 .signup__msg:not(:empty){ margin-top:var(--s2); }
+.signup input[readonly]{ color:var(--mist); }
+/* not yet confirmed (assets/js/signup.js retries by itself): a quiet pulse, never "done" */
+.signup[data-state="waiting"] .signup__msg::before, .signup[data-state="slow"] .signup__msg::before{
+  content:""; display:inline-block; width:.55em; height:.55em; margin-right:.55em;
+  border-radius:50%; background:var(--paper); vertical-align:.05em;
+}
+@media (prefers-reduced-motion:no-preference){
+  .signup[data-state="waiting"] .signup__msg::before, .signup[data-state="slow"] .signup__msg::before{ animation:pulse 1.2s ease-in-out infinite; }
+}
+@keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.25; } }
 .hp{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+/* Windows high contrast drops box-shadows: give the field row a real border and focus outline there */
+@media (forced-colors:active){
+  .signup__row{ border:1px solid CanvasText; }
+  .signup__row:focus-within{ outline:2px solid Highlight; outline-offset:2px; }
+}
 
 /* ---- Shows: one quiet button just above contact ------------------------- */
 .shows{ display:flex; justify-content:center; padding:var(--s6) var(--gutter) 0; }
@@ -351,17 +378,20 @@ html.motion .rv.in{
   <div class="news__body">
     <p class="label rv">Nieuwsbrief</p>
     <h2 class="news__title rv" style="--d:.08s" id="news-title">Weet het als eerste: nieuwe muziek, shows en presales.</h2>
-    <form class="signup rv" style="--d:.16s" id="signup" novalidate>
+    <!-- Zonder script bewaart een gewone POST naar dezelfde /exec-URL de inschrijving toch. -->
+    <form class="signup rv" style="--d:.16s" id="signup" data-regi action="https://script.google.com/macros/s/AKfycbx-hYqyZZ37_NrNOq4Yqt9d4yqra_CwzqE1DgngymrMlcxxlfFfpmpJvyNXdK0XFe17jw/exec" method="post" novalidate>
+      <input type="hidden" name="type" value="news">
+      <input type="hidden" name="source" value="home">
       <label class="sr" for="email">Je e-mailadres</label>
       <div class="signup__row">
         <input id="email" name="email" type="email" inputmode="email" autocomplete="email"
-               autocapitalize="off" spellcheck="false" placeholder="Je e-mailadres" required
+               autocapitalize="off" spellcheck="false" maxlength="120" placeholder="Je e-mailadres" required
                aria-describedby="signup-fine">
         <button class="btn btn--orange" type="submit">Schrijf me in</button>
       </div>
-      <div class="hp" aria-hidden="true"><label>Laat dit leeg <input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <div class="hp" aria-hidden="true"><label>Laat dit leeg <input name="hp_x" tabindex="-1" autocomplete="off" data-1p-ignore data-lpignore="true" data-bwignore></label></div>
       <p class="signup__fine" id="signup-fine">Af en toe een mail. Uitschrijven kan altijd. <a href="privacy.html">Privacy</a></p>
-      <p class="signup__msg" role="status" aria-live="polite"></p>
+      <p class="signup__msg" data-status role="status" aria-live="polite"></p>
     </form>
   </div>
 </section>
@@ -476,82 +506,34 @@ html.motion .rv.in{
   measure();
 })();
 
+</script>
+<script src="assets/js/signup.js?v=3" onerror="window.RegiSignupUnavailable=true;var f=document.querySelector('form[data-pending]');if(f){f.removeAttribute('data-pending');f.submit()}"></script>
+<script>
 (function () {
-  /* Nieuwsbrief -> Google Sheet "Regi · Nieuwsbrief" via de Apps Script web-app,
-     hetzelfde patroon als MILK RUN (zie DATA-CAPTURE.md + apps-script/Code.gs).
-     Plak hier de /exec-URL na het deployen. Leeg = demo-modus: het formulier werkt
-     volledig, maar verstuurt niets en bewaart enkel lokaal in deze browser.
-     NOOIT live zetten met een lege FORM_ENDPOINT: dan gaat elke inschrijving verloren. */
-  var FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbx-hYqyZZ37_NrNOq4Yqt9d4yqra_CwzqE1DgngymrMlcxxlfFfpmpJvyNXdK0XFe17jw/exec";
-
+  /* Nieuwsbrief -> Google Sheet "Regi · Nieuwsbrief" via de gedeelde verzendhulp
+     (assets/js/signup.js, ook gebruikt door /nieuws en /meetandgreet): outbox eerst,
+     herpogingen, en "ingeschreven" pas na een bevestiging van de server. De /exec-URL
+     staat in de action van het formulier (DATA-CAPTURE.md). */
+  var S = window.RegiSignup;
   var form = document.getElementById("signup");
-  if (!form) return;
-  var input = form.querySelector('input[name="email"]');
-  var trap = form.querySelector('input[name="website"]');
-  var msg = form.querySelector(".signup__msg");
-  var btn = form.querySelector('button[type="submit"]');
-  var label = btn.textContent;
-  var EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/;
-
-  function say(text) { msg.textContent = text; }
-  function invalid(on) {
-    form.classList.toggle("is-invalid", on);
-    if (on) input.setAttribute("aria-invalid", "true"); else input.removeAttribute("aria-invalid");
-  }
-  function done(ok) {
-    btn.disabled = false; btn.textContent = label;
-    if (ok) { form.reset(); say("Je bent ingeschreven. Tot in je inbox!"); }
-    else say("Inschrijven lukte niet. Probeer het straks opnieuw.");
-  }
-
-  input.addEventListener("input", function () {
-    if (form.classList.contains("is-invalid")) { invalid(false); say(""); }
-  });
-
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    if (trap && trap.value) { done(true); return; }          /* honeypot: doe alsof, bewaar niets */
-    var email = input.value.trim();
-    if (!EMAIL.test(email) || email.length > 120) {
-      invalid(true);
-      say("Dat e-mailadres klopt niet. Kijk het even na.");
-      input.focus();
-      return;
-    }
-    /* `at` = het moment van de klik op "Schrijf me in": dat is de toestemming */
-    var data = { type: "news", email: email, at: new Date().toISOString(), website: "" };
-    btn.disabled = true; btn.textContent = "Even geduld…"; say("");
-
-    if (FORM_ENDPOINT) {
-      /* form-urlencoded = "simple request": geen CORS-preflight tegen Apps Script.
-         Het script antwoordt met platte tekst: news-ok / news-dup (stond er al) /
-         news-bad (geweigerd). Al de rest (bv. een kaal "ok" van een verkeerde
-         deployment) telt als mislukt, zodat een adres nooit stil verdwijnt. */
-      fetch(FORM_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(data).toString()
-      })
-        .then(function (r) { return r.text(); })
-        .then(function (t) {
-          t = String(t).trim();
-          if (t === "news-ok" || t === "news-dup") { done(true); return; }
-          if (t === "news-bad") {
-            btn.disabled = false; btn.textContent = label; invalid(true);
-            say("Dat e-mailadres klopt niet. Kijk het even na."); input.focus(); return;
-          }
-          done(false);
-        })
-        .catch(function () { done(false); });
-    } else {
-      try {
-        var key = "regi_v2_demo_signups";
-        var list = JSON.parse(localStorage.getItem(key) || "[]");
-        list.push(data); localStorage.setItem(key, JSON.stringify(list));
-      } catch (err) {}
-      if (window.console) console.info("[Regi v2, demo-modus] niet verstuurd, enkel lokaal bewaard:", data);
-      setTimeout(function () { done(true); }, 500);
-    }
+  if (!S || !form) return;
+  S.bind(form, {
+    type: "news", page: "home", source: "home", test: /[?&]test\b/.test(location.search),
+    fields: ["email"],
+    check: function (v) {
+      if (!S.EMAIL.test(v.email) || v.email.length > 120) return { field: "email", text: "Dat e-mailadres klopt niet. Kijk het even na." };
+      return null;
+    },
+    busyLabel: "Even geduld…",
+    text: {
+      patience: "Nog even geduld, het is druk.",
+      waiting: "Het is druk. We proberen het vanzelf opnieuw. Laat deze pagina open.",
+      slow: "Nog niet binnen. We blijven proberen zolang deze pagina open is.",
+      bad: "Dat e-mailadres klopt niet. Kijk het even na.",
+      broken: "Er loopt iets mis met het formulier. Probeer het later opnieuw.",
+      done: "Je bent ingeschreven. Tot in je inbox!"
+    },
+    onDone: function () { form.elements.email.value = ""; }
   });
 })();
 </script>
