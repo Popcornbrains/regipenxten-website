@@ -16,7 +16,7 @@
 <meta property="og:url" content="https://www.regipenxten.be/agenda">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://www.regipenxten.be/agenda">
-<!-- Elke dag opnieuw gemaakt uit Bandsintown. Niet met de hand aanpassen: de volgende run overschrijft het. -->
+<!-- Drie keer per dag opnieuw gemaakt uit Bandsintown. Niet met de hand aanpassen: de volgende run overschrijft het. -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -92,20 +92,28 @@
   ]
 }
 </script>
+<link rel="stylesheet" href="/assets/scrollcraft/scrollcraft.css">
 <style>
-/* Same brand as the homepage: black canvas, white type, orange ONLY on buttons, one typeface.
-   The one display moment is the date column, set like the back of a tour shirt. No scripts,
-   no embeds, no cookies: the shows are baked in as plain HTML. */
+/* Same brand as the homepage: black canvas, white type, one typeface. On this page the ticket
+   button is Regi's second accent, blue #0047BB: it answers the lasers. No orange here.
+   One moment: the AFAS Dome lasers, black-and-white until you scroll, then the lights come on
+   while the camera pulls back from the booth (Scrollcraft pin: the colour layer is an engine
+   cue, the pull-back reads --sc-p). Below it the list, plain and fast, like the back of a tour
+   shirt. No embeds, no cookies: the shows are baked in as HTML. */
 :root{
   --ink:#000000;
   --paper:#FFFFFF;
-  --orange:#FA5301;
+  --blue:#0047BB;                 /* Regi's second accent; white on it 8:1 */
   --mist:rgba(255,255,255,.66);   /* secondary text, 9:1 on black */
   --faint:rgba(255,255,255,.48);  /* footer, 5.6:1 on black */
   --rule:rgba(255,255,255,.18);   /* hairline between shows */
   --font:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
   --spring:cubic-bezier(.34,1.56,.64,1);
   --gutter:16px;
+  /* the engine's six roles, set to the brand (brand beats Scrollcraft's defaults) */
+  --sc-canvas:#000000; --sc-surface:#000000; --sc-ink:#FFFFFF; --sc-ink-soft:rgba(255,255,255,.66);
+  --sc-accent:#0047BB; --sc-accent-ink:#FFFFFF;
+  --sc-font-display:var(--font); --sc-font-text:var(--font);
 }
 @media (min-width:640px){ :root{ --gutter:32px; } }
 
@@ -113,30 +121,55 @@
 html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
 body{
   margin:0; background:var(--ink); color:var(--paper);
-  font:400 1rem/1.6 var(--font);
+  font:400 1rem/1.6 var(--font); letter-spacing:normal;
   -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
 }
 a{ color:inherit; -webkit-tap-highlight-color:transparent; }
+:focus-visible{ outline:2px solid var(--paper); outline-offset:3px; }   /* white, like the rest of the site */
+::selection{ background:var(--paper); color:var(--ink); }
 .sr{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
-.page{ max-width:50rem; margin:0 auto; padding:0 var(--gutter); }
-.top{ padding-top:max(2rem, env(safe-area-inset-top)); }
+.wrap{ max-width:50rem; margin:0 auto; padding:0 var(--gutter); }
+
+/* ---- The laser moment ---------------------------------------------------- */
+.hero{ position:relative; }
+.hero__stage{ height:100vh; height:100svh; overflow:clip; background:var(--ink); }   /* the engine makes it sticky */
+.hero__media{
+  position:absolute; inset:0;
+  transform:scale(calc(1.12 - .12 * var(--sc-p, 0)));   /* from the booth to the whole hall */
+  transform-origin:52% 60%;
+}
+.hero__layer{ position:absolute; inset:0; display:block; }
+.hero__layer img{ width:100%; height:100%; max-width:none; object-fit:cover; object-position:52% 42%; }
+.hero__scrim{
+  position:absolute; inset:0; pointer-events:none;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 20%),
+    linear-gradient(to top, #000 0%, rgba(0,0,0,.78) 15%, rgba(0,0,0,0) 34%);   /* stops below the booth: its REGI stays white */
+}
+/* the spray logo is a white-on-black JPEG: the whole layer is screened onto the photo, so its
+   black drops out (on the img itself the blend would only meet this layer's own empty backdrop) */
+.hero__top{ position:absolute; left:0; right:0; top:0; z-index:2; padding-top:max(1.25rem, env(safe-area-inset-top)); mix-blend-mode:screen; }
 .home{ display:inline-block; border-radius:6px; }
-.home img{ display:block; width:min(52vw, 200px); height:auto; mix-blend-mode:screen; }   /* white-on-black JPEG, same trick as the hero */
-.home:focus-visible{ outline:2px solid var(--paper); outline-offset:4px; }
+.home img{ display:block; width:min(34vw, 150px); height:auto; }
+.hero__copy{ position:absolute; left:0; right:0; bottom:0; z-index:2; padding-bottom:max(2.75rem, env(safe-area-inset-bottom)); }
+h1{ margin:0; font-size:clamp(4rem, 19vw, 9.5rem); font-weight:700; line-height:.86; letter-spacing:-.055em; }
+.lead{ margin:1rem 0 0; max-width:24ch; font-size:1.125rem; line-height:1.45; color:rgba(255,255,255,.82); }
+@media (min-width:900px){   /* wide screens: one wider column, so logo, title and list share one left edge */
+  .wrap{ max-width:72rem; padding:0 48px; }
+  h1{ font-size:clamp(4rem, 7.2vw, 7rem); }
+}
+@media (prefers-reduced-motion:reduce){ .hero__media{ transform:none; } }
 
-h1{ margin:2.5rem 0 .4rem; font-size:clamp(2.5rem, 11vw, 4rem); font-weight:700; line-height:1; letter-spacing:-.045em; }
-.lead{ margin:0; font-size:1.125rem; color:var(--mist); }
-
-/* ---- The list: date | where | buttons ------------------------------------ */
+/* ---- The list: date | where | one button --------------------------------- */
 .year{ margin:3rem 0 0; font-size:.8125rem; font-weight:700; letter-spacing:.08em; color:var(--mist); }
-.gigs{ list-style:none; margin:2.5rem 0 0; padding:0; border-bottom:1px solid var(--rule); }
+.gigs{ list-style:none; margin:1.5rem 0 0; padding:0; border-bottom:1px solid var(--rule); }
 .year + .gigs{ margin-top:.75rem; }
 .gig{
   display:grid; grid-template-columns:4.75rem minmax(0,1fr); gap:1rem;
   padding:1.5rem 0; border-top:1px solid var(--rule); scroll-margin-top:1rem;
 }
-.when{ grid-row:1 / span 2; display:flex; flex-direction:column; line-height:1; }   /* buttons sit right under the text, not under the tall date */
+.when{ grid-row:1 / span 2; display:flex; flex-direction:column; line-height:1; }   /* the button sits right under the text, not under the tall date */
 .dow, .mon{ font-size:.75rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--mist); }
 .day{ margin:.3rem 0 .25rem; font-size:3rem; font-weight:700; letter-spacing:-.05em; font-variant-numeric:tabular-nums; }
 .what{ min-width:0; }
@@ -146,7 +179,7 @@ h1{ margin:2.5rem 0 .4rem; font-size:clamp(2.5rem, 11vw, 4rem); font-weight:700;
 .note{ margin-top:.1rem; font-size:.9375rem; }
 .act{ grid-column:2; display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; }
 .act .btn{ max-width:100%; white-space:normal; text-align:center; line-height:1.2; }   /* tiny screens or large text: wrap, never stick out */
-.soldout{ padding-right:.6em; font-weight:700; color:var(--mist); }
+.soldout{ font-weight:700; color:var(--mist); }
 @media (min-width:760px){
   .gig{ grid-template-columns:6.5rem minmax(0,1fr) auto; align-items:center; column-gap:1.5rem; padding:1.75rem 0; }
   .when{ grid-row:auto; }
@@ -155,7 +188,7 @@ h1{ margin:2.5rem 0 .4rem; font-size:clamp(2.5rem, 11vw, 4rem); font-weight:700;
   .act{ grid-column:3; justify-content:flex-end; }
 }
 
-.empty{ margin:2.5rem 0 0; padding:2rem 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); font-size:1.125rem; color:var(--mist); }
+.empty{ margin:2rem 0 0; padding:2rem 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); font-size:1.125rem; color:var(--mist); }
 
 /* ---- Buttons (pill, per the brand guide; same as the homepage) ----------- */
 .btn{
@@ -164,9 +197,8 @@ h1{ margin:2.5rem 0 .4rem; font-size:clamp(2.5rem, 11vw, 4rem); font-weight:700;
   font:700 1rem/1 var(--font); letter-spacing:.005em; text-decoration:none; white-space:nowrap;
   transition:transform .4s var(--spring), opacity .2s ease;
 }
-.btn--orange{ background:var(--orange); color:var(--ink); }   /* black on orange: 6.3:1 */
+.btn--blue{ background:var(--blue); color:var(--paper); }      /* white on blue: 8:1 */
 .btn--line{ background:transparent; color:var(--paper); box-shadow:inset 0 0 0 1.5px var(--paper); }
-.btn--sm{ min-height:44px; padding:0 1.1em; font-size:.9375rem; }
 .btn:hover{ transform:translateY(-2px); }
 .btn--line:hover{ background:var(--paper); color:var(--ink); }
 .btn:active{ transform:scale(.96); transition-duration:.12s; }
@@ -191,13 +223,32 @@ h1{ margin:2.5rem 0 .4rem; font-size:clamp(2.5rem, 11vw, 4rem); font-weight:700;
 </style>
 </head>
 <body>
-<div class="page">
-  <header class="top">
-    <a class="home" href="/"><img src="/assets/logo/regi-spray-800.jpg" width="800" height="311" alt="Regi, naar de homepage"></a>
-  </header>
-  <main>
-    <h1>Shows</h1>
-    <p class="lead">Waar en wanneer je Regi en Milk Inc. live ziet.</p>
+<main>
+  <section class="hero" data-sc-act="pin" data-sc-span="1.8" aria-labelledby="agenda-title">
+    <div class="hero__stage" data-sc-stage>
+      <div class="hero__media">
+        <picture class="hero__layer" aria-hidden="true">
+          <source media="(max-aspect-ratio: 3/4)" srcset="/assets/img/agenda-lasers-bw-m.jpg">
+          <img src="/assets/img/agenda-lasers-bw-1280.jpg" srcset="/assets/img/agenda-lasers-bw-1280.jpg 1280w, /assets/img/agenda-lasers-bw-2400.jpg 2400w" sizes="100vw" width="2400" height="1600" alt="" fetchpriority="high">
+        </picture>
+        <picture class="hero__layer" data-sc-cue="0.04 1 0.8 0" data-sc-rise="0">
+          <source media="(max-aspect-ratio: 3/4)" srcset="/assets/img/agenda-lasers-m.jpg">
+          <img src="/assets/img/agenda-lasers-1280.jpg" srcset="/assets/img/agenda-lasers-1280.jpg 1280w, /assets/img/agenda-lasers-2400.jpg 2400w" sizes="100vw" width="2400" height="1600" alt="Regi in de zwevende dj-booth onder de lasers, AFAS Dome, oktober 2026">
+        </picture>
+      </div>
+      <div class="hero__scrim" aria-hidden="true"></div>
+      <div class="hero__top">
+        <div class="wrap"><a class="home" href="/"><img src="/assets/logo/regi-spray-800.jpg" width="800" height="311" alt="Regi, naar de homepage"></a></div>
+      </div>
+      <div class="hero__copy">
+        <div class="wrap">
+          <h1 id="agenda-title">Shows</h1>
+          <p class="lead">Waar en wanneer je Regi en Milk Inc. live ziet.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="wrap">
     <ol class="gigs" role="list">
       <li class="gig" id="e-109078263">
         <time class="when" datetime="2026-12-05">
@@ -208,7 +259,7 @@ h1{ margin:2.5rem 0 .4rem; font-size:clamp(2.5rem, 11vw, 4rem); font-weight:700;
           <p class="city">Dendermonde</p>
           <p class="venue">Winter In Dendermonde</p>
         </div>
-        <div class="act"><a class="btn btn--line btn--sm" href="https://www.bandsintown.com/e/109078263?came_from=267&amp;utm_medium=api&amp;utm_source=public_api&amp;utm_campaign=event&amp;trigger=notify_me" target="_blank" rel="noopener">Hou me op de hoogte<span class="sr"> (Dendermonde, zaterdag 5 december 2026)</span></a><a class="btn btn--line btn--sm" href="https://www.bandsintown.com/e/109078263?came_from=267&amp;utm_medium=api&amp;utm_source=public_api&amp;utm_campaign=event&amp;trigger=rsvp_going" target="_blank" rel="noopener">Ik ga<span class="sr"> (Dendermonde, zaterdag 5 december 2026)</span></a></div>
+        <div class="act"><a class="btn btn--line" href="https://www.bandsintown.com/e/109078263?came_from=267&amp;utm_medium=api&amp;utm_source=public_api&amp;utm_campaign=event&amp;trigger=notify_me" target="_blank" rel="noopener">Hou me op de hoogte<span class="sr"> (Dendermonde, zaterdag 5 december 2026)</span></a></div>
       </li>
       <li class="gig" id="e-109078335">
         <time class="when" datetime="2026-12-31">
@@ -219,7 +270,7 @@ h1{ margin:2.5rem 0 .4rem; font-size:clamp(2.5rem, 11vw, 4rem); font-weight:700;
           <p class="city">Leuven</p>
           <p class="venue">New Year&#x27;s Eve</p>
         </div>
-        <div class="act"><a class="btn btn--orange" href="https://www.bandsintown.com/t/109078335?came_from=267&amp;utm_medium=api&amp;utm_source=public_api&amp;utm_campaign=ticket" target="_blank" rel="noopener">Tickets<span class="sr"> (Leuven, donderdag 31 december 2026)</span></a><a class="btn btn--line btn--sm" href="https://www.bandsintown.com/e/109078335?came_from=267&amp;utm_medium=api&amp;utm_source=public_api&amp;utm_campaign=event&amp;trigger=rsvp_going" target="_blank" rel="noopener">Ik ga<span class="sr"> (Leuven, donderdag 31 december 2026)</span></a></div>
+        <div class="act"><a class="btn btn--blue" href="https://www.bandsintown.com/t/109078335?came_from=267&amp;utm_medium=api&amp;utm_source=public_api&amp;utm_campaign=ticket" target="_blank" rel="noopener">Tickets<span class="sr"> (Leuven, donderdag 31 december 2026)</span></a></div>
       </li>
     </ol>
     <div class="follow">
@@ -227,12 +278,15 @@ h1{ margin:2.5rem 0 .4rem; font-size:clamp(2.5rem, 11vw, 4rem); font-weight:700;
       <a class="btn btn--line" href="https://www.bandsintown.com/a/370722?came_from=267&amp;trigger=track" target="_blank" rel="noopener">Volg Regi</a>
       <a class="btn btn--line" href="https://www.bandsintown.com/a/5226?came_from=267&amp;trigger=track" target="_blank" rel="noopener">Volg Milk Inc.</a>
     </div>
-  </main>
-</div>
+  </div>
+</main>
 <footer class="foot">
   <p>© Regi Penxten</p>
   <a href="/privacy.html">Privacy</a>
+  <p class="credit">Foto's: Ilias Van Bambost</p>
   <p>Shows via Bandsintown</p>
 </footer>
+<script src="/assets/scrollcraft/scrollcraft.js" defer></script>
+<script src="/assets/js/agenda.js" defer></script>
 </body>
 </html>
