@@ -202,6 +202,10 @@
   --ap-glass-rim:inset 0 1px 1px rgba(255,255,255,.22), inset 0 -1px 1px rgba(255,255,255,.05),
                  inset 1px 0 0 rgba(255,255,255,.06), inset -1px 0 0 rgba(255,255,255,.06);
   --ap-glass-edge:0 0 0 .5px rgba(0,0,0,.6);
+  /* v1.4 depth: a resting card lifts by one surface step + a hairline of light top and bottom, never a drop shadow */
+  --edge-light:inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(255,255,255,.22),
+               inset 0 7px 5px -4px rgba(255,255,255,.06), inset 0 -7px 5px -4px rgba(255,255,255,.06),
+               inset 1px 0 0 rgba(0,0,0,.09), inset -1px 0 0 rgba(0,0,0,.09);
   --ap-glass-shadow:0 1px 2px rgba(0,0,0,.3), 0 12px 32px rgba(0,0,0,.5);
 
   --ease-smooth:cubic-bezier(.22,1,.36,1);
@@ -308,7 +312,8 @@ h1{ margin:0; font-size:clamp(64px, 19vw, 152px); font-weight:700; line-height:.
 /* ---- The list: one inset grouped card per year, like a calendar --------- */
 /* year: Apple's Title 2 bold, outside the card, title case */
 .year{ margin:48px 0 0; padding:0 16px; font-size:22px; line-height:28px; font-weight:700; letter-spacing:-.012em; color:var(--ap-label); }
-.gigs{ list-style:none; margin:24px 0 0; padding:0; background:var(--ap-bg-grouped-2); border-radius:var(--ap-r-group); overflow:hidden; }
+.gigs{ position:relative; list-style:none; margin:24px 0 0; padding:0; background:var(--ap-bg-grouped-2); border-radius:var(--ap-r-group); overflow:hidden; }
+.gigs::after{ content:""; position:absolute; inset:0; border-radius:inherit; box-shadow:var(--edge-light); pointer-events:none; }
 .year + .gigs{ margin-top:10px; }
 .gig{
   position:relative;
@@ -317,8 +322,15 @@ h1{ margin:0; font-size:clamp(64px, 19vw, 152px); font-weight:700; line-height:.
 }
 .gig + .gig::before{ content:""; position:absolute; top:0; left:16px; right:16px; height:.5px; background:var(--ap-separator); }   /* inset both sides [meting] */
 /* the date: weekday small, the day big, the month small, like a calendar leaf */
-.when{ grid-row:1 / span 2; display:flex; flex-direction:column; align-items:center; line-height:1; padding-top:2px; }
-.dow, .mon{ font-size:12px; font-weight:600; letter-spacing:.02em; text-transform:uppercase; color:var(--ap-label-2); }
+/* the date as a tinted leaf in Regi blue: Apple's Calendar recipe, tint 18% over the card [v1.4 .ap-tint, dark];
+   text lifted toward white: small caps 6.7:1, the day 12:1 (the recipe's 30% would give 3.9:1 at 12px) [Derived] */
+.when{
+  grid-row:1 / span 2; align-self:start;
+  display:flex; flex-direction:column; align-items:center; line-height:1;
+  padding:9px 0 8px; border-radius:10px;   /* a pill in a card: --ap-r-row */
+  background:#17243A; color:#D9E3F5;
+}
+.dow, .mon{ font-size:12px; font-weight:600; letter-spacing:.02em; text-transform:uppercase; color:#8CACE0; }
 .day{ margin:4px 0 3px; font-size:34px; font-weight:700; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
 .what{ min-width:0; }
 .who{ margin:0 0 2px; font-size:13px; line-height:18px; font-weight:600; letter-spacing:-.006em; color:var(--ap-label-2); }   /* which act: the page carries two */
@@ -336,7 +348,9 @@ h1{ margin:0; font-size:clamp(64px, 19vw, 152px); font-weight:700; line-height:.
   .day{ font-size:40px; }
 }
 
-.empty{ margin:32px 0 0; padding:20px; border-radius:var(--ap-r-group); background:var(--ap-bg-grouped-2); font-size:17px; color:var(--ap-label-2); }
+.empty{ margin:32px 0 0; padding:20px; border-radius:var(--ap-r-group); background:var(--ap-bg-grouped-2); box-shadow:var(--edge-light); font-size:17px; color:var(--ap-label-2); }
+/* the canvas is never flat black [v1.4]: one faint glow in Regi blue under the list (8%, ceiling 10%) */
+body{ background-image:radial-gradient(80% 620px at 50% 100%, rgba(0,71,187,.08), transparent 72%); }   /* on the page bottom, so it never ends in an edge */
 
 /* ---- Buttons: capsules [Apple]. Tickets = the one prominent action. ------- */
 .btn{
@@ -352,7 +366,7 @@ h1{ margin:0; font-size:clamp(64px, 19vw, 152px); font-weight:700; line-height:.
 .btn--blue{   /* white on blue: 8:1 */
   background:linear-gradient(180deg, rgba(255,255,255,.16), transparent 55%), var(--blue);
   color:var(--paper); font-weight:600;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.22), 0 1px 2px rgba(0,71,187,.4), 0 8px 22px rgba(0,71,187,.28);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22);   /* no coloured glow: Apple buttons carry none (v1.4) */
 }
 .btn--line{ background:var(--ap-fill-2); }   /* Apple's bordered style: a grey fill, no outline */
 @media (hover:hover) and (pointer:fine){
@@ -400,7 +414,7 @@ h1{ margin:0; font-size:clamp(64px, 19vw, 152px); font-weight:700; line-height:.
 }
 @media (prefers-contrast:more){
   .glass{ background:#000; -webkit-backdrop-filter:none; backdrop-filter:none; border:1px solid #fff; box-shadow:none; }
-  .gigs, .empty{ box-shadow:inset 0 0 0 1px rgba(255,255,255,.5); }
+  .gigs::after, .empty{ box-shadow:inset 0 0 0 1px #fff; }
 }
 </style>
 </head>
