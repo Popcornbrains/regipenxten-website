@@ -100,6 +100,11 @@ document.addEventListener("submit", function (e) {
                  inset 1px 0 0 rgba(255,255,255,.06), inset -1px 0 0 rgba(255,255,255,.06);
   --ap-glass-edge:0 0 0 .5px rgba(0,0,0,.6);
   --ap-glass-shadow:0 1px 2px rgba(0,0,0,.3), 0 12px 32px rgba(0,0,0,.5);
+  /* v1.4 depth: a resting card lifts by one surface step + a hairline of light top and bottom,
+     never a drop shadow (a shadow cannot darken a black canvas) [brand-tokens.css --ap-edge-light, dark] */
+  --edge-light:inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(255,255,255,.22),
+               inset 0 7px 5px -4px rgba(255,255,255,.06), inset 0 -7px 5px -4px rgba(255,255,255,.06),
+               inset 1px 0 0 rgba(0,0,0,.09), inset -1px 0 0 rgba(0,0,0,.09);
 
   --s1:.5rem; --s2:.75rem; --s3:1rem; --s4:1.5rem; --s5:2rem; --s6:3rem; --s7:4.5rem; --s8:7rem;
   --gutter:16px;
@@ -149,7 +154,7 @@ a{ color:inherit; -webkit-tap-highlight-color:transparent; }
 .btn--orange{
   background:linear-gradient(180deg, rgba(255,255,255,.16), transparent 55%), var(--orange);
   color:var(--ap-on-accent); font-weight:600;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.22), 0 1px 2px rgba(250,83,1,.35), 0 10px 28px rgba(250,83,1,.22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22);   /* no coloured glow: Apple buttons carry none (v1.4) */
 }
 /* bordered: Apple's grey fill, for the quiet actions in the content layer */
 .btn--grey{ background:var(--ap-fill-2); }
@@ -292,7 +297,8 @@ html.bar-on .bar > a + a{ transition-delay:.06s; }
   .news__photo img{ object-position:72% 50%; }
 }
 /* from a tablet on, the photo is a rounded tile like an Apple product tile */
-@media (min-width:640px){ .news__photo{ border-radius:28px; transform:translateZ(0); } }
+@media (min-width:640px){ .news__photo{ border-radius:27px; transform:translateZ(0); } }   /* a free-standing tile: the widget radius [v1.4] */
+@supports (corner-shape:superellipse(1.3)){ @media (min-width:640px){ .news__photo{ border-radius:32px; corner-shape:superellipse(1.3); } } }
 .news__body{ padding:0 var(--gutter); max-width:36rem; width:100%; margin:0 auto; text-align:center; }
 /* eyebrow: Apple's headline weight, in the label grey; title case, never caps */
 .label{ margin:0 0 var(--s2); font-size:17px; font-weight:600; letter-spacing:-.022em; color:var(--ap-label-2); }
@@ -349,10 +355,10 @@ html.motion .rv.in{
   display:flex; align-items:center; gap:var(--s1);
   padding:4px; border-radius:9999px;
   background:var(--ap-bg-grouped-2);
-  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.08);
+  box-shadow:var(--edge-light);
   transition:box-shadow .44s var(--ease-smooth);
 }
-.signup__row:focus-within{ box-shadow:inset 0 0 0 .5px rgba(255,255,255,.08), 0 0 0 3px color-mix(in srgb, var(--orange) 55%, transparent); }
+.signup__row:focus-within{ box-shadow:var(--edge-light), 0 0 0 3px color-mix(in srgb, var(--orange) 55%, transparent); }
 .signup.is-invalid .signup__row{ box-shadow:inset 0 0 0 2px var(--paper); }
 .signup input[type="email"]{
   flex:1; min-width:0; height:var(--ap-hit); padding:0 0 0 18px;
@@ -391,9 +397,12 @@ html.motion .rv.in{
 
 /* ---- 3. Contact: an inset grouped list, like Settings -------------------- */
 .contact{ max-width:calc(560px + 2 * var(--gutter)); margin:0 auto; padding:var(--s6) var(--gutter) 0; }
+/* the canvas is never flat black [v1.4]: one faint glow in Regi orange behind contact and socials (8%, the ceiling is 10%) */
+body{ background-image:radial-gradient(75% 560px at 50% 100%, rgba(250,83,1,.08), transparent 72%); }   /* on the page bottom, so it never ends in an edge */
 /* section header outside the card: large, grey, title case [Apple-screenshot] */
 .list-head{ margin:0 0 var(--s1); padding:0 16px; font-size:17px; font-weight:400; letter-spacing:-.022em; color:var(--ap-label-2); }
-.roles{ list-style:none; margin:0; padding:0; background:var(--ap-bg-grouped-2); border-radius:var(--ap-r-group); overflow:hidden; }
+.roles{ position:relative; list-style:none; margin:0; padding:0; background:var(--ap-bg-grouped-2); border-radius:var(--ap-r-group); overflow:hidden; }
+.roles::after{ content:""; position:absolute; inset:0; border-radius:inherit; box-shadow:var(--edge-light); pointer-events:none; }   /* above the rows, so a pressed row never hides it */
 .roles li{ position:relative; }
 .roles li + li::before{ content:""; position:absolute; top:0; left:16px; right:16px; height:.5px; background:var(--ap-separator); }   /* inset both sides [meting] */
 .row{
@@ -444,7 +453,7 @@ html.motion .rv.in{
 /* Increase Contrast [Apple]: glass turns solid with a contrast edge */
 @media (prefers-contrast:more){
   .glass{ background:#000; -webkit-backdrop-filter:none; backdrop-filter:none; border:1px solid #fff; box-shadow:none; }
-  .roles{ box-shadow:inset 0 0 0 1px rgba(255,255,255,.5); }
+  .roles::after{ box-shadow:inset 0 0 0 1px #fff; }
 }
 </style>
 </head>
