@@ -169,43 +169,105 @@
 </script>
 <link rel="stylesheet" href="/assets/scrollcraft/scrollcraft.css">
 <style>
-/* Same brand as the homepage: black canvas, white type, one typeface. On this page the ticket
-   button is Regi's second accent, blue #0047BB: it answers the lasers. No orange here.
+/* Same brand and chassis as the homepage (Apple chassis, Lester 9/11/2026): black canvas,
+   white type, the system font on Apple's type scale, capsules, inset grouped cards on Apple's
+   dark grey ladder, glass only in the floating bar. On this page the ticket button is Regi's
+   second accent, blue #0047BB: it answers the lasers, and it is the one prominent action. No
+   orange here.
    One moment: the AFAS Dome lasers, black-and-white until you scroll, then the lights come on
    while the camera pulls back from the booth (Scrollcraft pin: the colour layer is an engine
    cue, the pull-back reads --sc-p). The colour is full after ± 0.37 screen of scroll, the first
-   half of the pin (Lester 26/10: "na anderhalf al klaar"; was 0.8 = ± 0.65 screen). Below it the list, plain and fast, like the back of a tour
-   shirt. No embeds, no cookies: the shows are baked in as HTML. */
+   half of the pin (Lester 26/10: "na anderhalf al klaar"). Below it the list, one card per
+   year, like a calendar on the phone. No embeds, no cookies: the shows are baked in as HTML. */
 :root{
+  color-scheme:dark;
   --ink:#000000;
   --paper:#FFFFFF;
   --blue:#0047BB;                 /* Regi's second accent; white on it 8:1 */
-  --mist:rgba(255,255,255,.66);   /* secondary text, 9:1 on black */
-  --faint:rgba(255,255,255,.48);  /* footer, 5.6:1 on black */
-  --rule:rgba(255,255,255,.18);   /* hairline between shows */
-  --font:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
-  --spring:cubic-bezier(.34,1.56,.64,1);
+
+  /* chassis: Apple dark (brand-assets/apple-design/brand-tokens.css) */
+  --ap-bg-grouped-2:#1C1C1E;
+  --ap-label:#FFFFFF;
+  --ap-label-2:rgba(235,235,245,.6);   /* 7.6:1 on black, 6.3:1 on the card */
+  --ap-fill-2:rgba(120,120,128,.32);
+  --ap-fill-3:rgba(118,118,128,.24);
+  --ap-separator:rgba(84,84,88,.6);
+  --ap-font-sans:-apple-system, BlinkMacSystemFont, "Inter", "InterVariable", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ap-r-group:16px;
+  --ap-hit:44px;
+  --ap-glass-fill:rgba(28,28,30,.45);
+  --ap-glass-sheen:linear-gradient(180deg, rgba(255,255,255,.10), transparent 46%);
+  --ap-glass-rim:inset 0 1px 1px rgba(255,255,255,.22), inset 0 -1px 1px rgba(255,255,255,.05),
+                 inset 1px 0 0 rgba(255,255,255,.06), inset -1px 0 0 rgba(255,255,255,.06);
+  --ap-glass-edge:0 0 0 .5px rgba(0,0,0,.6);
+  --ap-glass-shadow:0 1px 2px rgba(0,0,0,.3), 0 12px 32px rgba(0,0,0,.5);
+
+  --ease-smooth:cubic-bezier(.22,1,.36,1);
+  --ease-snappy:cubic-bezier(.3,1.25,.5,1);
   --gutter:16px;
+  --max:72rem;
   /* the engine's six roles, set to the brand (brand beats Scrollcraft's defaults) */
-  --sc-canvas:#000000; --sc-surface:#000000; --sc-ink:#FFFFFF; --sc-ink-soft:rgba(255,255,255,.66);
+  --sc-canvas:#000000; --sc-surface:#000000; --sc-ink:#FFFFFF; --sc-ink-soft:rgba(235,235,245,.6);
   --sc-accent:#0047BB; --sc-accent-ink:#FFFFFF;
-  --sc-font-display:var(--font); --sc-font-text:var(--font);
+  --sc-font-display:var(--ap-font-sans); --sc-font-text:var(--ap-font-sans);
+}
+@supports (transition-timing-function:linear(0, 1)){
+  :root{
+    --ease-smooth:linear(0, 0.057, 0.180, 0.321, 0.455, 0.573, 0.671, 0.750, 0.812, 0.860, 0.896, 0.924, 0.944, 0.960, 0.971, 0.979, 0.985, 0.989, 0.992, 0.994, 0.996, 0.997, 0.998, 0.999, 1);
+    --ease-snappy:linear(0, 0.054, 0.176, 0.322, 0.467, 0.598, 0.707, 0.795, 0.862, 0.912, 0.947, 0.971, 0.987, 0.997, 1.003, 1.005, 1.006, 1.006, 1.005, 1.005, 1.004, 1.003, 1.002, 1.001, 1);
+  }
 }
 @media (min-width:640px){ :root{ --gutter:32px; } }
 
 *,*::before,*::after{ box-sizing:border-box; }
 html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
 body{
-  margin:0; background:var(--ink); color:var(--paper);
-  font:400 1rem/1.6 var(--font); letter-spacing:normal;
+  margin:0; background:var(--ink); color:var(--ap-label);
+  font:400 17px/1.47 var(--ap-font-sans); letter-spacing:-.022em;
   -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
 }
 a{ color:inherit; -webkit-tap-highlight-color:transparent; }
-:focus-visible{ outline:2px solid var(--paper); outline-offset:3px; }   /* white, like the rest of the site */
+:focus-visible{ outline:3px solid rgba(255,255,255,.8); outline-offset:3px; }
 ::selection{ background:var(--paper); color:var(--ink); }
 .sr{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
-.wrap{ max-width:50rem; margin:0 auto; padding:0 var(--gutter); }
+.wrap{ max-width:var(--max); margin:0 auto; padding:0 var(--gutter); }   /* one column: logo, title and the cards share one left edge */
+
+/* ---- The floating bar (Lester 9/11): back home + listen. Glass only here. It appears
+   once the laser moment has scrolled away (assets/js/agenda.js sets html.bar-on). ---- */
+.bar{
+  position:fixed; z-index:20; top:0; left:0; right:0; isolation:isolate;
+  display:flex; justify-content:space-between; align-items:center; gap:.5rem;
+  padding:max(8px, env(safe-area-inset-top)) max(var(--gutter), calc((100% - var(--max)) / 2)) 8px;
+  pointer-events:none;
+}
+.bar::before{   /* iOS 27's hard scroll edge: one uniform frosted band under the pills */
+  content:""; position:absolute; inset:0; z-index:-1;
+  background:rgba(0,0,0,.8);
+  -webkit-backdrop-filter:blur(20px) saturate(170%); backdrop-filter:blur(20px) saturate(170%);
+  border-bottom:.5px solid var(--ap-separator);
+  opacity:0; transition:opacity .44s var(--ease-smooth);
+}
+html.bar-on .bar::before{ opacity:1; }
+.bar > a{
+  pointer-events:auto;
+  visibility:hidden; opacity:0; transform:translateY(-8px) scale(.94);
+  transition:opacity .44s var(--ease-smooth), transform .73s var(--ease-smooth), visibility 0s linear .44s;
+}
+html.bar-on .bar > a{
+  visibility:visible; opacity:1; transform:none;
+  transition:opacity .44s var(--ease-smooth), transform .73s var(--ease-smooth), visibility 0s;
+}
+html.bar-on .bar > a + a{ transition-delay:.06s; }
+.bar .btn{ height:var(--ap-hit); min-height:0; padding:0 18px; }
+.bar__home{ padding:0 16px !important; }
+.bar__home img{ display:block; width:auto; height:22px; }
+.glass{
+  background:var(--ap-glass-sheen), var(--ap-glass-fill);
+  -webkit-backdrop-filter:blur(20px) saturate(170%); backdrop-filter:blur(20px) saturate(170%);
+  border:.5px solid rgba(255,255,255,.10);
+  box-shadow:var(--ap-glass-rim), var(--ap-glass-edge), var(--ap-glass-shadow);
+}
 
 /* ---- The laser moment ---------------------------------------------------- */
 .hero{ position:relative; }
@@ -229,90 +291,126 @@ a{ color:inherit; -webkit-tap-highlight-color:transparent; }
 .home{ display:inline-block; border-radius:6px; }
 .home img{ display:block; width:min(34vw, 150px); height:auto; }
 .hero__copy{ position:absolute; left:0; right:0; bottom:0; z-index:2; padding-bottom:max(2.75rem, env(safe-area-inset-bottom)); }
-h1{ margin:0; font-size:clamp(4rem, 19vw, 9.5rem); font-weight:700; line-height:.86; letter-spacing:-.055em; }
-.lead{ margin:1rem 0 0; max-width:24ch; font-size:1.125rem; line-height:1.45; color:rgba(255,255,255,.82); }
-@media (min-width:900px){   /* wide screens: one wider column, so logo, title and list share one left edge */
-  .wrap{ max-width:72rem; padding:0 48px; }
-  h1{ font-size:clamp(4rem, 7.2vw, 7rem); }
+/* Apple's product-page headline: heavy, tight, huge */
+h1{ margin:0; font-size:clamp(64px, 19vw, 152px); font-weight:700; line-height:.9; letter-spacing:-.045em; }
+.lead{ margin:14px 0 0; max-width:24ch; font-size:19px; line-height:1.32; letter-spacing:-.022em; color:rgba(255,255,255,.86); }
+
+@media (min-width:900px){
+  .wrap{ padding:0 48px; }
+  .bar{ padding-left:max(48px, calc((100% - var(--max)) / 2 + 48px)); padding-right:max(48px, calc((100% - var(--max)) / 2 + 48px)); }
+  h1{ font-size:clamp(64px, 7.2vw, 112px); }
+  .lead{ font-size:21px; }
 }
 @media (prefers-reduced-motion:reduce){ .hero__media{ transform:none; } }
 
-/* ---- The list: date | where | one button --------------------------------- */
-.year{ margin:3rem 0 0; font-size:.8125rem; font-weight:700; letter-spacing:.08em; color:var(--mist); }
-.gigs{ list-style:none; margin:1.5rem 0 0; padding:0; border-bottom:1px solid var(--rule); }
-.year + .gigs{ margin-top:.75rem; }
+/* ---- The list: one inset grouped card per year, like a calendar --------- */
+/* year: Apple's Title 2 bold, outside the card, title case */
+.year{ margin:48px 0 0; padding:0 16px; font-size:22px; line-height:28px; font-weight:700; letter-spacing:-.012em; color:var(--ap-label); }
+.gigs{ list-style:none; margin:24px 0 0; padding:0; background:var(--ap-bg-grouped-2); border-radius:var(--ap-r-group); overflow:hidden; }
+.year + .gigs{ margin-top:10px; }
 .gig{
-  display:grid; grid-template-columns:4.75rem minmax(0,1fr); gap:1rem;
-  padding:1.5rem 0; border-top:1px solid var(--rule); scroll-margin-top:1rem;
+  position:relative;
+  display:grid; grid-template-columns:3.5rem minmax(0,1fr); column-gap:14px; row-gap:12px;
+  padding:16px; scroll-margin-top:72px;
 }
-.when{ grid-row:1 / span 2; display:flex; flex-direction:column; line-height:1; }   /* the button sits right under the text, not under the tall date */
-.dow, .mon{ font-size:.75rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--mist); }
-.day{ margin:.3rem 0 .25rem; font-size:3rem; font-weight:700; letter-spacing:-.05em; font-variant-numeric:tabular-nums; }
+.gig + .gig::before{ content:""; position:absolute; top:0; left:16px; right:16px; height:.5px; background:var(--ap-separator); }   /* inset both sides [meting] */
+/* the date: weekday small, the day big, the month small, like a calendar leaf */
+.when{ grid-row:1 / span 2; display:flex; flex-direction:column; align-items:center; line-height:1; padding-top:2px; }
+.dow, .mon{ font-size:12px; font-weight:600; letter-spacing:.02em; text-transform:uppercase; color:var(--ap-label-2); }
+.day{ margin:4px 0 3px; font-size:34px; font-weight:700; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
 .what{ min-width:0; }
-.who{ margin:0 0 .35rem; font-size:.75rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--mist); }   /* which act: the page carries two */
-.city{ margin:0; font-size:clamp(1.375rem, 5.6vw, 1.75rem); font-weight:700; line-height:1.15; letter-spacing:-.025em; overflow-wrap:anywhere; }
-.venue, .note{ margin:.25rem 0 0; color:var(--mist); overflow-wrap:anywhere; }
-.note{ margin-top:.1rem; font-size:.9375rem; }
-.act{ grid-column:2; display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; }
+.who{ margin:0 0 2px; font-size:13px; line-height:18px; font-weight:600; letter-spacing:-.006em; color:var(--ap-label-2); }   /* which act: the page carries two */
+.city{ margin:0; font-size:20px; line-height:25px; font-weight:600; letter-spacing:-.023em; overflow-wrap:anywhere; }        /* Title 3 */
+.venue, .note{ margin:2px 0 0; font-size:15px; line-height:20px; letter-spacing:-.016em; color:var(--ap-label-2); overflow-wrap:anywhere; }
+.note{ font-size:13px; line-height:18px; }
+.act{ grid-column:2; display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
 .act .btn{ max-width:100%; white-space:normal; text-align:center; line-height:1.2; }   /* tiny screens or large text: wrap, never stick out */
-.soldout{ font-weight:700; color:var(--mist); }
+.soldout{ font-size:15px; font-weight:600; color:var(--ap-label-2); }
 @media (min-width:760px){
-  .gig{ grid-template-columns:6.5rem minmax(0,1fr) auto; align-items:center; column-gap:1.5rem; padding:1.75rem 0; }
+  .gig{ grid-template-columns:4.5rem minmax(0,1fr) auto; align-items:center; column-gap:20px; padding:18px 20px; }
+  .gig + .gig::before{ left:20px; right:20px; }
   .when{ grid-row:auto; }
-  .act{ grid-row:1; }
-  .day{ font-size:3.75rem; }
-  .act{ grid-column:3; justify-content:flex-end; }
+  .act{ grid-row:1; grid-column:3; justify-content:flex-end; }
+  .day{ font-size:40px; }
 }
 
-.empty{ margin:2rem 0 0; padding:2rem 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); font-size:1.125rem; color:var(--mist); }
+.empty{ margin:32px 0 0; padding:20px; border-radius:var(--ap-r-group); background:var(--ap-bg-grouped-2); font-size:17px; color:var(--ap-label-2); }
 
-/* ---- Buttons (pill, per the brand guide; same as the homepage) ----------- */
+/* ---- Buttons: capsules [Apple]. Tickets = the one prominent action. ------- */
 .btn{
+  position:relative;
   display:inline-flex; align-items:center; justify-content:center;
-  min-height:48px; padding:0 1.4em; border:0; border-radius:999px; cursor:pointer;
-  font:700 1rem/1 var(--font); letter-spacing:.005em; text-decoration:none; white-space:nowrap;
-  transition:transform .4s var(--spring), opacity .2s ease;
+  min-width:var(--ap-hit); min-height:var(--ap-hit); padding:0 20px; border:0; border-radius:9999px; cursor:pointer;
+  font:400 17px/1 var(--ap-font-sans); letter-spacing:-.022em; text-decoration:none; white-space:nowrap;
+  color:var(--ap-label); background:transparent;
+  -webkit-tap-highlight-color:transparent; user-select:none; -webkit-user-select:none;
+  transition:transform .49s var(--ease-snappy), opacity .44s var(--ease-smooth), background-color .44s var(--ease-smooth);
 }
-.btn--blue{ background:var(--blue); color:var(--paper); }      /* white on blue: 8:1 */
-.btn--line{ background:transparent; color:var(--paper); box-shadow:inset 0 0 0 1.5px var(--paper); }
-.btn:hover{ transform:translateY(-2px); }
-.btn--line:hover{ background:var(--paper); color:var(--ink); }
-.btn:active{ transform:scale(.96); transition-duration:.12s; }
-.btn:focus-visible{ outline:3px solid var(--paper); outline-offset:3px; }
+.btn svg{ width:20px; height:20px; fill:currentColor; flex:none; margin-right:8px; }
+.btn--blue{   /* white on blue: 8:1 */
+  background:linear-gradient(180deg, rgba(255,255,255,.16), transparent 55%), var(--blue);
+  color:var(--paper); font-weight:600;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22), 0 1px 2px rgba(0,71,187,.4), 0 8px 22px rgba(0,71,187,.28);
+}
+.btn--line{ background:var(--ap-fill-2); }   /* Apple's bordered style: a grey fill, no outline */
+@media (hover:hover) and (pointer:fine){
+  .btn--blue:hover{ background:linear-gradient(180deg, rgba(255,255,255,.24), transparent 55%), var(--blue); }
+  .btn--line:hover{ background:rgba(120,120,128,.42); }
+  .glass.btn:hover{ background:var(--ap-glass-sheen), rgba(58,58,60,.55); }
+}
+.btn:active{ transform:scale(.97); opacity:.85; transition-duration:.15s; }
+.glass.btn:active{ transform:scale(1.04); opacity:1; }   /* glass lifts instead of dimming [Apple] */
+.btn:focus-visible{ outline:3px solid rgba(255,255,255,.8); outline-offset:3px; }
 
-.follow{ display:flex; flex-wrap:wrap; align-items:center; gap:.75rem; margin:3.5rem 0 0; }
-.follow p{ flex-basis:100%; margin:0 0 .25rem; font-size:1.125rem; font-weight:500; letter-spacing:-.01em; color:var(--mist); }
+.follow{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:48px 0 0; padding:0 16px; }
+.follow p{ flex-basis:100%; margin:0 0 4px; font-size:17px; color:var(--ap-label-2); }
 
 /* Regi online: the homepage's six icons, copied as-is (same order, same links). The job's gate
    only lets these exact links through (SOCIALS in regi_agenda.py); a test keeps both in step
-   with the homepage. */
-.socials{ list-style:none; display:flex; justify-content:center; gap:.5rem; margin:4rem 0 0; padding:0 var(--gutter); }
+   with the homepage. 44 grey circles, like Apple's share row. */
+.socials{ list-style:none; display:flex; justify-content:center; gap:.5rem; margin:64px 0 0; padding:0 var(--gutter); }
 .socials a{
-  display:grid; place-items:center; width:48px; height:48px; border-radius:999px;
-  opacity:.82; transition:transform .4s var(--spring), opacity .2s ease;
+  display:grid; place-items:center; width:var(--ap-hit); height:var(--ap-hit); border-radius:50%;
+  background:var(--ap-fill-3); color:var(--ap-label);
+  transition:transform .49s var(--ease-snappy), background-color .44s var(--ease-smooth);
 }
-.socials a:hover{ opacity:1; transform:translateY(-2px); }
-.socials a:active{ transform:scale(.92); transition-duration:.12s; }
-.socials a:focus-visible{ outline:2px solid var(--paper); outline-offset:2px; opacity:1; }
-.socials svg{ width:22px; height:22px; fill:currentColor; }
-@media (max-width:374px){ .socials{ gap:4px; } .socials a{ width:44px; height:44px; } }   /* 320px phones: still a full tap target */
+@media (hover:hover) and (pointer:fine){ .socials a:hover{ background:var(--ap-fill-2); } }
+.socials a:active{ transform:scale(.92); transition-duration:.15s; }
+.socials a:focus-visible{ outline:3px solid rgba(255,255,255,.8); outline-offset:2px; }
+.socials svg{ width:20px; height:20px; fill:currentColor; }
+@media (max-width:374px){ .socials{ gap:4px; } }   /* 6 x 44 + 5 x 4 = 284px: fits a 320px phone */
 
 .foot{
   display:flex; flex-wrap:wrap; justify-content:center; gap:.35rem 1.25rem;
   margin:0; padding:2rem var(--gutter) max(2rem, env(safe-area-inset-bottom));
-  font-size:.8125rem; color:var(--faint);
+  font-size:13px; line-height:18px; letter-spacing:-.006em; color:var(--ap-label-2);
 }
 .foot p{ margin:0; }
 .foot > *{ white-space:nowrap; }
-.foot a{ color:var(--mist); text-underline-offset:3px; border-radius:3px; transition:opacity .2s ease; }
-.foot a:hover{ color:var(--paper); }
+.foot a{ color:var(--ap-label); text-decoration:none; border-radius:3px; transition:opacity .2s ease; }
+.foot a:hover{ text-decoration:underline; text-underline-offset:3px; }
 .foot a:active{ opacity:.6; }
 .foot a:focus-visible{ outline:2px solid var(--paper); outline-offset:3px; }
 
-@media (prefers-reduced-motion:reduce){ .btn, .socials a{ transition:none; } }
+@media (prefers-reduced-motion:reduce){
+  .btn, .socials a, .bar > a, .bar::before{ transition:none !important; }
+  .btn:active, .glass.btn:active{ transform:none; }
+}
+@media (prefers-contrast:more){
+  .glass{ background:#000; -webkit-backdrop-filter:none; backdrop-filter:none; border:1px solid #fff; box-shadow:none; }
+  .gigs, .empty{ box-shadow:inset 0 0 0 1px rgba(255,255,255,.5); }
+}
 </style>
 </head>
 <body>
+<!-- The floating bar (Lester 9/11): home + listen, glass, appears after the laser moment (agenda.js) -->
+<nav class="bar" aria-label="Snel naar">
+  <a class="btn glass bar__home" href="/" aria-label="Regi, naar de homepage"><img src="/assets/logo/regi-spray-wit-240.png" width="240" height="93" alt=""></a>
+  <a class="btn glass" href="https://open.spotify.com/artist/77ehFS1P2bU6Bfcs1qu6Jd" target="_blank" rel="noopener" aria-label="Luister naar Regi op Spotify">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+    Luister
+  </a>
+</nav>
 <main>
   <section class="hero" data-sc-act="pin" data-sc-span="1.8" aria-labelledby="agenda-title">
     <div class="hero__stage" data-sc-stage>
